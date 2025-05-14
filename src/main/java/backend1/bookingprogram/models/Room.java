@@ -1,9 +1,10 @@
 package backend1.bookingprogram.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -14,5 +15,13 @@ import lombok.*;
 public class Room {
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
+    @NotEmpty
+    private String roomNumber;
+    private String roomName;
+    @NotEmpty
+    private int size;
+    @OneToMany
+    @JoinColumn(name = "booking_id")
+    private List<Booking> bookings;
 }
