@@ -23,6 +23,5 @@ public class Guest {
     private String email;
     private String phonenumber;
     @OneToMany
-    @JoinColumn(name = "booking_id")
     private List<Booking> bookings;
 }

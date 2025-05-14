@@ -22,6 +22,5 @@ public class Room {
     @NotEmpty
     private int size;
     @OneToMany
-    @JoinColumn(name = "booking_id")
     private List<Booking> bookings;
 }
