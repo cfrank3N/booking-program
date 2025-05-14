@@ -1,0 +1,31 @@
+package backend1.bookingprogram.models;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
+
+import java.time.LocalDate;
+
+@Entity
+@Data
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor
+@Setter
+@Getter
+public class Booking {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @NotEmpty
+    private LocalDate dateFrom;
+    @NotEmpty
+    private LocalDate dateUntil;
+    @NotEmpty
+    private int amountOfGuests;
+    @ManyToOne
+    @JoinColumn(name = "guest_id")
+    private Guest guest;
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+}
