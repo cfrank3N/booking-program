@@ -10,8 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-@Setter
-@Getter
+
 public class Booking {
     @Id
     @GeneratedValue
@@ -21,7 +20,7 @@ public class Booking {
     @NotEmpty
     private LocalDate dateUntil;
     @NotEmpty
-    private int amountOfGuests;
+    private int numberOfGuests;
     @ManyToOne
     @JoinColumn(name = "guest_id")
     private Guest guest;
