@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.models.Guest;
-import backend1.bookingprogram.repositories.GuestRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
