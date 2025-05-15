@@ -17,7 +17,7 @@ public class BookingService {
     }
 
     public ResponseEntity<String> createGuest(Guest g) {
-        if (guestRepo.findAllByEmail(g.getEmail()).isPresent()) {
+        if (guestRepo.findByEmail(g.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException(g.getEmail() + " already exists");
         }
 
