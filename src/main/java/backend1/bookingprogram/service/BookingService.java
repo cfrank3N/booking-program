@@ -1,9 +1,17 @@
 package backend1.bookingprogram.service;
 
+
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
 import org.slf4j.LoggerFactory;
+
+import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
+import backend1.bookingprogram.models.Guest;
+import backend1.bookingprogram.repositories.GuestRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,5 +42,14 @@ public class BookingService {
     public boolean guestHasActiveBookings(Long guestID){
         return bookingRepo.findAllByGuestId(guestID)
                 .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
+    }
+
+    public ResponseEntity<String> createGuest(Guest g) {
+        if (guestRepo.findByEmail(g.getEmail()).isPresent()) {
+            throw new ResourceAlreadyExistsException(g.getEmail() + " already exists");
+        }
+
+        guestRepo.save(g);
+        return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
     }
 }
