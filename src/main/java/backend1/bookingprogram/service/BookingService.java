@@ -1,6 +1,7 @@
 package backend1.bookingprogram.service;
 
 
+import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class BookingService {
@@ -51,4 +53,20 @@ public class BookingService {
         guestRepo.save(g);
         return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
     }
+
+    public ResponseEntity<String> createBooking(Booking booking) {
+        List<Booking> overlapping = bookingRepo.findByRoomIdAndDateUntilAfterAndDateFromBefore(
+                booking.getRoom().getId(),
+                booking.getDateFrom(),
+                booking.getDateUntil()
+        );
+
+        if (!overlapping.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
+        }
+
+        bookingRepo.save(booking);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
+    }
+
 }

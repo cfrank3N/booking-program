@@ -67,3 +67,17 @@ src/main/java/
 Room size. 
 Enkelrum/DubbelRum1/DubbelRum2
 Splitta på siza 
+
+seeder.java class: adds in data post build. Bootstrapping.
+
+```java
+@Component
+@PostConstruct
+public void seed() {
+    if (kompisRepository.count() == 0) {
+        List<Kompis> kompisar = List.of(
+                new Kompis());
+        kompisRepository.saveAll(kompisar);
+    }
+}
+```
