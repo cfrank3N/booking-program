@@ -55,18 +55,25 @@ public class BookingService {
     }
 
     public ResponseEntity<String> createBooking(Booking booking) {
+
+        // check booking dates
         List<Booking> overlapping = bookingRepo.findByRoomIdAndDateUntilAfterAndDateFromBefore(
                 booking.getRoom().getId(),
                 booking.getDateFrom(),
                 booking.getDateUntil()
         );
 
+        // if overlapping dates in Room.getId() = fail.
         if (!overlapping.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
         }
 
         bookingRepo.save(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
+    }
+
+        public List<Booking> getBookingsForRoom(Long roomId) {
+        return bookingRepo.findAll().stream().filter(b -> b.getRoom().getId().equals(roomId)).toList();
     }
 
 }
