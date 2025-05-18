@@ -24,4 +24,11 @@ public class Guest {
     private String phonenumber;
     @OneToMany(mappedBy = "guest")
     private List<Booking> bookings;
+
+    public Guest(String name, String email, String phonenumber, List<Booking> bookings) {
+        this.name = name;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.bookings = bookings;
+    }
 }

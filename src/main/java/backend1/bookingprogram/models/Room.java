@@ -25,4 +25,11 @@ public class Room {
     private int size;
     @OneToMany(mappedBy = "room")
     private List<Booking> bookings;
+
+    public Room(String roomNumber, String roomName, int size, List<Booking> bookings) {
+        this.roomNumber = roomNumber;
+        this.roomName = roomName;
+        this.size = size;
+        this.bookings = bookings;
+    }
 }

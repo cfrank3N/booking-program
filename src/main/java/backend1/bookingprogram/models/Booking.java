@@ -27,4 +27,12 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    public Booking(LocalDate dateFrom, LocalDate dateUntil, int numberOfGuests, Guest guest, Room room) {
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
+        this.numberOfGuests = numberOfGuests;
+        this.guest = guest;
+        this.room = room;
+    }
 }
