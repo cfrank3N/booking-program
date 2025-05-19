@@ -1,6 +1,8 @@
 package backend1.bookingprogram.service;
 
 
+import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
+import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
@@ -38,6 +40,14 @@ public class BookingService {
             guestRepo.deleteById(id);
             return " guest(s) deleted.";
         }
+    }
+
+    public ResponseEntity<String> deleteBooking(Long id) {
+        if (bookingRepo.findById(id).isEmpty()) {
+            throw new ResourceDoesntExistException("Can't find booking");
+        }
+        bookingRepo.deleteById(id);
+        return ResponseEntity.ok("Booking " + id + "cancelled");
     }
 
     public boolean guestHasActiveBookings(Long guestID){
