@@ -1,7 +1,9 @@
 package backend1.bookingprogram.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,11 +17,11 @@ public class Booking {
     @Id
     @GeneratedValue
     private Long id;
-    @NotEmpty
+    @NotNull
     private LocalDate dateFrom;
-    @NotEmpty
+    @NotNull
     private LocalDate dateUntil;
-    @NotEmpty
+    @Min(value = 1)
     private int numberOfGuests;
     @ManyToOne
     @JoinColumn(name = "guest_id")
