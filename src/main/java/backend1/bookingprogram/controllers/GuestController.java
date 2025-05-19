@@ -4,16 +4,13 @@ package backend1.bookingprogram.controllers;
 import backend1.bookingprogram.service.BookingService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import backend1.bookingprogram.models.Guest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 public class GuestController {
@@ -36,4 +33,15 @@ public class GuestController {
         return bookingService.createGuest(g);
 
     }
+
+    @PutMapping("/guest/{id}")
+    public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody Guest g) {
+        return bookingService.alterGuest(id, g);
+    }
+
+    @GetMapping("/guest")
+    public List<Guest> getGuests() {
+        return bookingService.getAllGuests();
+    }
+
 }

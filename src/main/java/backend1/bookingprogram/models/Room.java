@@ -22,7 +22,7 @@ public class Room {
     private String roomNumber;
     private String roomName;
     @NotEmpty
-    private int size;
+    private int roomSize;
     @OneToMany
     private List<Booking> bookings;
 }
