@@ -1,5 +1,10 @@
 package backend1.bookingprogram.service;
 
+
+import backend1.bookingprogram.dtos.BookingDTO;
+import backend1.bookingprogram.exceptions.CantDeleteException;
+import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
+
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.repositories.BookingRepository;
@@ -10,12 +15,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static backend1.bookingprogram.mappers.BookingMapper.bookingToBookingDTODetailed;
+
 @Service
 public class BookingService {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookingService.class);
     private final BookingRepository bookingRepo;
 
+
+    public List<BookingDTO> fetchAllBookings() {
+        return bookingRepo.findAll().stream().map(booking -> bookingToBookingDTODetailed(booking)).toList();
+    }
+
+ 
     public BookingService(BookingRepository bookingRepo) {
+
         this.bookingRepo = bookingRepo;
     }
 

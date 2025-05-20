@@ -1,5 +1,6 @@
 package backend1.bookingprogram.controllers;
 
+import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.service.BookingService;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,11 @@ public class BookingController {
     public List<Booking> getBookingsForRoom(@PathVariable Long roomId) {
         return service.getBookingsForRoom(roomId);
 
+    }
+
+    @GetMapping("/bookings")
+    public List<BookingDTO> getAllBookings() {
+        return service.fetchAllBookings();
     }
 
     @DeleteMapping("booking/{id}")

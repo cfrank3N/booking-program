@@ -1,6 +1,10 @@
 package backend1.bookingprogram.controllers;
 
 
+
+import backend1.bookingprogram.dtos.GuestDTO;
+import backend1.bookingprogram.service.BookingService;
+
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -16,6 +20,7 @@ import java.util.List;
 public class GuestController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(GuestController.class);
+
     private final GuestService service;
 
     public GuestController(GuestService service) {
@@ -39,8 +44,9 @@ public class GuestController {
     }
 
     @GetMapping("/guest")
-    public List<Guest> getGuests() {
-        return service.getAllGuests();
+    public List<GuestDTO> getGuests() {
+        return guestService.fetchAllGuests();
+
     }
 
 }

@@ -1,9 +1,14 @@
 package backend1.bookingprogram.service;
 
+
+import backend1.bookingprogram.dtos.BookingDTO;
+import backend1.bookingprogram.dtos.GuestDTO;
+
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Guest;
+
 import backend1.bookingprogram.repositories.GuestRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -11,8 +16,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
+import java.util.List;
+
+import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
+
+
 import java.time.LocalDate;
 import java.util.List;
+
 
 @Service
 public class GuestService {
@@ -22,6 +34,15 @@ public class GuestService {
     public GuestService(GuestRepository repo) {
         this.repo = repo;
     }
+
+
+    public List<GuestDTO> fetchAllGuests() {
+        return repo.findAll()
+                .stream()
+                .map(g -> guestToGuestDTODetailed(g))
+                .toList();
+    }
+
 
     public List<Guest> getAllGuests() {
         return repo.findAll();
@@ -70,6 +91,7 @@ public class GuestService {
 
         return ResponseEntity.ok("User updated");
     }
+
 
 
 }
