@@ -1,7 +1,12 @@
 package backend1.bookingprogram.service;
 
+import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.repositories.RoomRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static backend1.bookingprogram.mappers.RoomMapper.roomToRoomDTODetailed;
 
 
 @Service
@@ -26,5 +31,12 @@ public class RoomService {
         if (size < 20) return 1;
         else if (size < 40) return 2;
         else return 3;
+    }
+
+    public List<RoomDTO> fetchAllRooms() {
+        return roomRepository.findAll()
+                .stream()
+                .map(room -> roomToRoomDTODetailed(room))
+                .toList();
     }
 }
