@@ -38,7 +38,7 @@ public class GuestController {
     }
 
     @PutMapping("/guest/{id}")
-    public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody Guest g) {
+    public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody GuestDTO g) {
         return service.alterGuest(id, g);
     }
 

@@ -77,7 +77,7 @@ public class GuestService {
     }
 
     @Transactional
-    public ResponseEntity<String> alterGuest(Long id, Guest g) {
+    public ResponseEntity<String> alterGuest(Long id, GuestDTO g) {
         if (repo.findByEmail(g.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("Email is taken!");
         }
