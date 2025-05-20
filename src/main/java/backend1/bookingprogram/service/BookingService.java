@@ -1,10 +1,12 @@
 package backend1.bookingprogram.service;
 
+import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
 
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
@@ -40,6 +42,14 @@ public class BookingService {
         }
     }
 
+    public ResponseEntity<String> deleteBooking(Long id) {
+        if (bookingRepo.findById(id).isEmpty()) {
+            throw new ResourceDoesntExistException("Can't find booking");
+        }
+        bookingRepo.deleteById(id);
+        return ResponseEntity.ok("Booking " + id + "cancelled");
+    }
+
     public boolean guestHasActiveBookings(Long guestID){
         return bookingRepo.findAllByGuestId(guestID)
                 .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
@@ -53,6 +63,7 @@ public class BookingService {
         guestRepo.save(g);
         return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
     }
+
 
     public ResponseEntity<String> createBooking(Booking booking) {
 
@@ -74,6 +85,26 @@ public class BookingService {
 
         public List<Booking> getBookingsForRoom(Long roomId) {
         return bookingRepo.findAll().stream().filter(b -> b.getRoom().getId().equals(roomId)).toList();
+
+    @Transactional
+    public ResponseEntity<String> alterGuest(Long id, Guest g) {
+        if (guestRepo.findByEmail(g.getEmail()).isPresent()) {
+            throw new ResourceAlreadyExistsException("Email is taken!");
+        }
+        guestRepo.findById(id).ifPresent(guest -> {
+
+            guest.setName(g.getName());
+            guest.setEmail(g.getEmail());
+            guest.setPhonenumber(g.getPhonenumber());
+
+        });
+
+        return ResponseEntity.ok("User updated");
+    }
+
+    public List<Guest> getAllGuests() {
+        return guestRepo.findAll();
+
     }
 
 }

@@ -22,8 +22,9 @@ public class Room {
     @Pattern(regexp = "^[1-9][0-9][1-9]$", message = "Room number must be 3 digits starting with 1-9, and the last digit cannot be 0.")
     private String roomNumber;
     private String roomName;
+
     @Min(value = 1, message ="Room size can't be smaller than 1kvm")
-//    @Column(name = "room_size", nullable = false)
+
     private int roomSize;
     @OneToMany(mappedBy = "room")
     private List<Booking> bookings;

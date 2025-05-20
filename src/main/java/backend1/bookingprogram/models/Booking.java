@@ -21,6 +21,7 @@ public class Booking {
     private LocalDate dateFrom;
     @NotNull
     private LocalDate dateUntil;
+  
     @Min(value = 1, message ="must be at least 1 guest")
     private int numberOfGuests;
     @ManyToOne
