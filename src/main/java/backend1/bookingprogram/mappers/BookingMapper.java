@@ -15,4 +15,10 @@ public class BookingMapper {
                 .room(RoomMapper.roomToRoomDTOMinimal(b.getRoom()))
                 .build();
     }
+
+    public static BookingDTO bookingToBookingDTOMinimal(Booking b) {
+        return BookingDTO.builder()
+                .id(b.getId())
+                .build();
+    }
 }
