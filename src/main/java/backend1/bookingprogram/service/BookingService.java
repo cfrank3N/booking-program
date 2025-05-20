@@ -1,19 +1,16 @@
 package backend1.bookingprogram.service;
 
+import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
-
 import backend1.bookingprogram.models.Booking;
+import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
-
-import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
-import backend1.bookingprogram.models.Guest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -50,7 +47,7 @@ public class BookingService {
         return ResponseEntity.ok("Booking " + id + "cancelled");
     }
 
-    public boolean guestHasActiveBookings(Long guestID){
+    public boolean guestHasActiveBookings(Long guestID) {
         return bookingRepo.findAllByGuestId(guestID)
                 .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
     }
@@ -83,8 +80,9 @@ public class BookingService {
         return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
     }
 
-        public List<Booking> getBookingsForRoom(Long roomId) {
+    public List<Booking> getBookingsForRoom(Long roomId) {
         return bookingRepo.findAll().stream().filter(b -> b.getRoom().getId().equals(roomId)).toList();
+    }
 
     @Transactional
     public ResponseEntity<String> alterGuest(Long id, Guest g) {
