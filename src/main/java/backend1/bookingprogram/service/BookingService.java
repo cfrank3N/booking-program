@@ -1,5 +1,6 @@
 package backend1.bookingprogram.service;
 
+import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Booking;
@@ -30,8 +31,12 @@ public class BookingService {
     }
 
     public String deleteGuest(Long id) {
+        if (guestRepo.findById(id).isEmpty()) {
+            throw new ResourceDoesntExistException("Guest doesn't exist");
+        }
+
         if (guestHasActiveBookings(id))
-            return "The guest can not be deleted because he/she has active bookings.";
+            throw new CantDeleteException("Guest has active bookings!");
         else {
             log.info("Guest with ID: {} was deleted.", id);
             guestRepo.deleteById(id);

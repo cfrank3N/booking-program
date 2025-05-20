@@ -1,5 +1,6 @@
 package backend1.bookingprogram.handlers;
 
+import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,10 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(ResourceDoesntExistException.class)
     public ResponseEntity<String> handleResourceDoesntExist(ResourceDoesntExistException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CantDeleteException.class)
+    public ResponseEntity<String> handleCantDelete(CantDeleteException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }
