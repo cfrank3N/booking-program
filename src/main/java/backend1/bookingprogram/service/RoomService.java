@@ -1,16 +1,15 @@
 package backend1.bookingprogram.service;
 
-import backend1.bookingprogram.models.Room;
 import backend1.bookingprogram.repositories.RoomRepository;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class RoomTypeService {
+public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public RoomTypeService(RoomRepository roomRepository) {
+    public RoomService(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
