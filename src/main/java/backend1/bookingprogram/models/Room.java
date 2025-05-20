@@ -23,6 +23,6 @@ public class Room {
     private String roomName;
     @NotEmpty
     private int roomSize;
-    @OneToMany
+    @OneToMany(mappedBy = "room")
     private List<Booking> bookings;
 }

@@ -22,6 +22,6 @@ public class Guest {
     @Column(unique = true)
     private String email;
     private String phonenumber;
-    @OneToMany
+    @OneToMany(mappedBy = "guest")
     private List<Booking> bookings;
 }
