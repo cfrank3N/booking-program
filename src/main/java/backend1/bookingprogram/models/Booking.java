@@ -21,7 +21,8 @@ public class Booking {
     private LocalDate dateFrom;
     @NotNull
     private LocalDate dateUntil;
-    @Min(value = 1)
+  
+    @Min(value = 1, message ="must be at least 1 guest")
     private int numberOfGuests;
     @ManyToOne
     @JoinColumn(name = "guest_id")
@@ -29,4 +30,12 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    public Booking(LocalDate dateFrom, LocalDate dateUntil, int numberOfGuests, Guest guest, Room room) {
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
+        this.numberOfGuests = numberOfGuests;
+        this.guest = guest;
+        this.room = room;
+    }
 }
