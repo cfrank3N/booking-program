@@ -32,13 +32,13 @@ public class GuestController {
     }
 
     @PostMapping("/guest")
-    public ResponseEntity<String> createGuest(@Valid @RequestBody Guest g) {
+    public ResponseEntity<String> createGuest(@Valid @RequestBody GuestDTO g) {
         return service.createGuest(g);
 
     }
 
     @PutMapping("/guest/{id}")
-    public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody Guest g) {
+    public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody GuestDTO g) {
         return service.alterGuest(id, g);
     }
 

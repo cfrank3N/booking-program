@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static backend1.bookingprogram.mappers.GuestMapper.guestDTOToGuestDetailed;
 import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
 
 
@@ -33,7 +34,6 @@ public class GuestService {
         this.repo = repo;
     }
 
-
     public List<GuestDTO> fetchAllGuests() {
         return repo.findAll()
                 .stream()
@@ -41,17 +41,13 @@ public class GuestService {
                 .toList();
     }
 
+    public ResponseEntity<String> createGuest(GuestDTO g) {
 
-    public List<Guest> getAllGuests() {
-        return repo.findAll();
-    }
-
-    public ResponseEntity<String> createGuest(Guest g) {
         if (repo.findByEmail(g.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException(g.getEmail() + " already exists");
         }
 
-        repo.save(g);
+        repo.save(guestDTOToGuestDetailed(g));
         return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
     }
 
@@ -75,7 +71,7 @@ public class GuestService {
     }
 
     @Transactional
-    public ResponseEntity<String> alterGuest(Long id, Guest g) {
+    public ResponseEntity<String> alterGuest(Long id, GuestDTO g) {
         if (repo.findByEmail(g.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("Email is taken!");
         }

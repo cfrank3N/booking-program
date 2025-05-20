@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static backend1.bookingprogram.mappers.BookingMapper.bookingDTOToBookingDetailed;
 import static backend1.bookingprogram.mappers.BookingMapper.bookingToBookingDTODetailed;
 
 @Service
@@ -39,7 +40,7 @@ public class BookingService {
         return ResponseEntity.ok("Booking " + id + "cancelled");
     }
 
-    public ResponseEntity<String> createBooking(Booking booking) {
+    public ResponseEntity<String> createBooking(BookingDTO booking) {
 
         // check booking dates
         List<Booking> overlapping = bookingRepo.findByRoomIdAndDateUntilAfterAndDateFromBefore(
@@ -53,7 +54,8 @@ public class BookingService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
         }
 
-        bookingRepo.save(booking);
+        Booking b = bookingDTOToBookingDetailed(booking);
+        bookingRepo.save(b);
         return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
     }
 

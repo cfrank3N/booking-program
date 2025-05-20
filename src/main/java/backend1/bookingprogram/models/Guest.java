@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class Guest {
     @Id @GeneratedValue
     private Long id;
