@@ -3,7 +3,6 @@ package backend1.bookingprogram.controllers;
 
 
 import backend1.bookingprogram.dtos.GuestDTO;
-import backend1.bookingprogram.service.BookingService;
 
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
@@ -45,7 +44,7 @@ public class GuestController {
 
     @GetMapping("/guest")
     public List<GuestDTO> getGuests() {
-        return guestService.fetchAllGuests();
+        return service.fetchAllGuests();
 
     }
 

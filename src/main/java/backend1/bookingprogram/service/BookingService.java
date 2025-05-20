@@ -2,8 +2,6 @@ package backend1.bookingprogram.service;
 
 
 import backend1.bookingprogram.dtos.BookingDTO;
-import backend1.bookingprogram.exceptions.CantDeleteException;
-import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Booking;

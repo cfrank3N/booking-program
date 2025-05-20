@@ -1,7 +1,6 @@
 package backend1.bookingprogram.service;
 
 
-import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.dtos.GuestDTO;
 
 import backend1.bookingprogram.exceptions.CantDeleteException;
@@ -23,7 +22,6 @@ import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetaile
 
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 @Service
