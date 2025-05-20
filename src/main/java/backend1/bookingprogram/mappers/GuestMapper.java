@@ -32,4 +32,11 @@ public class GuestMapper {
                 .build();
     }
 
+    public static Guest guestDTOToGuestMinimal(GuestDTO g) {
+        return Guest.builder()
+                .id(g.getId())
+                .name(g.getName())
+                .build();
+    }
+
 }

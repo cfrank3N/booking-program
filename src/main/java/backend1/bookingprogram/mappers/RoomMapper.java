@@ -29,6 +29,13 @@ public class RoomMapper {
                 .build();
     }
 
+    public static Room roomDTOToRoomMinimal(RoomDTO r) {
+        return Room.builder()
+                .id(r.getId())
+                .roomNumber(r.getRoomNumber())
+                .build();
+    }
+
 
 
 }
