@@ -34,17 +34,11 @@ public class GuestService {
         this.repo = repo;
     }
 
-
     public List<GuestDTO> fetchAllGuests() {
         return repo.findAll()
                 .stream()
                 .map(g -> guestToGuestDTODetailed(g))
                 .toList();
-    }
-
-
-    public List<Guest> getAllGuests() {
-        return repo.findAll();
     }
 
     public ResponseEntity<String> createGuest(GuestDTO g) {
