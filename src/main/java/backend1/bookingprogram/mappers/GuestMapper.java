@@ -24,4 +24,12 @@ public class GuestMapper {
                 .build();
     }
 
+    public static Guest guestDTOToGuestDetailed(GuestDTO g) {
+        return Guest.builder()
+                .name(g.getName())
+                .email(g.getEmail())
+                .phonenumber(g.getPhonenumber())
+                .build();
+    }
+
 }

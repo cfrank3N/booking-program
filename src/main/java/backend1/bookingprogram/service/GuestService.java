@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static backend1.bookingprogram.mappers.GuestMapper.guestDTOToGuestDetailed;
 import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
 
 
@@ -46,12 +47,13 @@ public class GuestService {
         return repo.findAll();
     }
 
-    public ResponseEntity<String> createGuest(Guest g) {
+    public ResponseEntity<String> createGuest(GuestDTO g) {
+
         if (repo.findByEmail(g.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException(g.getEmail() + " already exists");
         }
 
-        repo.save(g);
+        repo.save(guestDTOToGuestDetailed(g));
         return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
     }
 

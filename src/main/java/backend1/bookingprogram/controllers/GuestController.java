@@ -32,7 +32,7 @@ public class GuestController {
     }
 
     @PostMapping("/guest")
-    public ResponseEntity<String> createGuest(@Valid @RequestBody Guest g) {
+    public ResponseEntity<String> createGuest(@Valid @RequestBody GuestDTO g) {
         return service.createGuest(g);
 
     }
