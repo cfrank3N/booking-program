@@ -1,7 +1,7 @@
 package backend1.bookingprogram.controllers;
 
 
-import backend1.bookingprogram.service.BookingService;
+import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -16,32 +16,31 @@ import java.util.List;
 public class GuestController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(GuestController.class);
-    private final BookingService bookingService;
+    private final GuestService service;
 
-    public GuestController(BookingService bookingService) {
-        this.bookingService = bookingService;
+    public GuestController(GuestService service) {
+        this.service = service;
     }
     @Transactional
     @DeleteMapping("/guest/{id}/delete")
     public String deleteGuest(@PathVariable Long id) {
-        return bookingService.deleteGuest(id);
-
+        return service.deleteGuest(id);
     }
 
     @PostMapping("/guest")
     public ResponseEntity<String> createGuest(@Valid @RequestBody Guest g) {
-        return bookingService.createGuest(g);
+        return service.createGuest(g);
 
     }
 
     @PutMapping("/guest/{id}")
     public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody Guest g) {
-        return bookingService.alterGuest(id, g);
+        return service.alterGuest(id, g);
     }
 
     @GetMapping("/guest")
     public List<Guest> getGuests() {
-        return bookingService.getAllGuests();
+        return service.getAllGuests();
     }
 
 }

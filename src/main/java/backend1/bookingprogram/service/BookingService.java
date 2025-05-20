@@ -1,47 +1,22 @@
 package backend1.bookingprogram.service;
 
-import backend1.bookingprogram.exceptions.CantDeleteException;
-import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Booking;
-import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.repositories.BookingRepository;
-import backend1.bookingprogram.repositories.GuestRepository;
-import backend1.bookingprogram.repositories.RoomRepository;
-import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class BookingService {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookingService.class);
     private final BookingRepository bookingRepo;
-    private final GuestRepository guestRepo;
-    private final RoomRepository roomRepo;
 
-    public BookingService(BookingRepository bookingRepo, GuestRepository guestRepo, RoomRepository roomRepo) {
+    public BookingService(BookingRepository bookingRepo) {
         this.bookingRepo = bookingRepo;
-        this.guestRepo = guestRepo;
-        this.roomRepo = roomRepo;
-    }
-
-    public String deleteGuest(Long id) {
-        if (guestRepo.findById(id).isEmpty()) {
-            throw new ResourceDoesntExistException("Guest doesn't exist");
-        }
-
-        if (guestHasActiveBookings(id))
-            throw new CantDeleteException("Guest has active bookings!");
-        else {
-            log.info("Guest with ID: {} was deleted.", id);
-            guestRepo.deleteById(id);
-            return " guest(s) deleted.";
-        }
     }
 
     public ResponseEntity<String> deleteBooking(Long id) {
@@ -51,21 +26,6 @@ public class BookingService {
         bookingRepo.deleteById(id);
         return ResponseEntity.ok("Booking " + id + "cancelled");
     }
-
-    public boolean guestHasActiveBookings(Long guestID) {
-        return bookingRepo.findAllByGuestId(guestID)
-                .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
-    }
-
-    public ResponseEntity<String> createGuest(Guest g) {
-        if (guestRepo.findByEmail(g.getEmail()).isPresent()) {
-            throw new ResourceAlreadyExistsException(g.getEmail() + " already exists");
-        }
-
-        guestRepo.save(g);
-        return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
-    }
-
 
     public ResponseEntity<String> createBooking(Booking booking) {
 
@@ -89,25 +49,6 @@ public class BookingService {
         return bookingRepo.findAll().stream().filter(b -> b.getRoom().getId().equals(roomId)).toList();
     }
 
-    @Transactional
-    public ResponseEntity<String> alterGuest(Long id, Guest g) {
-        if (guestRepo.findByEmail(g.getEmail()).isPresent()) {
-            throw new ResourceAlreadyExistsException("Email is taken!");
-        }
-        guestRepo.findById(id).ifPresent(guest -> {
 
-            guest.setName(g.getName());
-            guest.setEmail(g.getEmail());
-            guest.setPhonenumber(g.getPhonenumber());
-
-        });
-
-        return ResponseEntity.ok("User updated");
-    }
-
-    public List<Guest> getAllGuests() {
-        return guestRepo.findAll();
-
-    }
 
 }
