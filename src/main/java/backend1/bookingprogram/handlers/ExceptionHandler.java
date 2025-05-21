@@ -11,16 +11,25 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
+import static backend1.bookingprogram.enums.RoutingInfo.HOMEPAGE;
+import static backend1.bookingprogram.enums.RoutingInfo.REGISTER_GUEST;
+
 @ControllerAdvice
 public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ResourceAlreadyExistsException.class)
     public ModelAndView handleResourceAlreadyExists(HttpServletRequest req , ResourceAlreadyExistsException e) {
         ModelAndView mav = new ModelAndView();
+        String uri = req.getRequestURI();
         mav.addObject("error", e.getMessage());
-        mav.addObject("url", "A request to " + req.getRequestURL() + " caused an error");
         mav.addObject("guest", new GuestDTO());
-        mav.setViewName("register-guest");
+
+        if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
+            mav.setViewName(REGISTER_GUEST.getViewName());
+        } else {
+            mav.setViewName(HOMEPAGE.getViewName());
+        }
+
         return mav;
     }
 
@@ -29,13 +38,12 @@ public class ExceptionHandler {
         ModelAndView mav = new ModelAndView();
         String uri = req.getRequestURI();
         mav.addObject("error", e.getBody());
-        mav.addObject("url","A request to " + uri + " caused an error");
         mav.addObject("guest", new GuestDTO());
 
-        if (uri.equalsIgnoreCase("/guest/register")) {
-            mav.setViewName("register-guest");
+        if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
+            mav.setViewName(REGISTER_GUEST.getViewName());
         } else {
-            mav.setViewName("index");
+            mav.setViewName(HOMEPAGE.getViewName());
         }
         return mav;
     }
