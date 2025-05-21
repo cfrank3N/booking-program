@@ -22,9 +22,9 @@ public class ExceptionHandler {
         ModelAndView mav = new ModelAndView();
         String uri = req.getRequestURI();
         mav.addObject("error", e.getMessage());
-        mav.addObject("guest", new GuestDTO());
 
         if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
+            mav.addObject("guest", new GuestDTO());
             mav.setViewName(REGISTER_GUEST.getViewName());
         } else {
             mav.setViewName(HOMEPAGE.getViewName());
