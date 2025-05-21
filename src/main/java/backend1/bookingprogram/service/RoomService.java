@@ -4,6 +4,7 @@ import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.repositories.RoomRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static backend1.bookingprogram.mappers.RoomMapper.roomToRoomDTODetailed;
@@ -31,6 +32,16 @@ public class RoomService {
         if (size < 20) return 1;
         else if (size < 40) return 2;
         else return 3;
+    }
+
+    public List<RoomDTO> fetchAllAvailableRooms(LocalDate startDate, LocalDate endDate) {
+        return  roomRepository.findAll()
+                .stream()
+                .filter(room -> room.getBookings()
+                        .stream()
+                        .noneMatch(booking -> booking.getDateFrom().isBefore(endDate) &&
+                                booking.getDateUntil().isAfter(startDate)))
+                .map(room -> roomToRoomDTODetailed(room)).toList();
     }
 
     public List<RoomDTO> fetchAllRooms() {
