@@ -36,6 +36,11 @@ public class BookingController {
         return service.fetchAllBookings();
     }
 
+    @PutMapping("/booking/{id}")
+    public ResponseEntity<String> changeBooking(@PathVariable long id, @RequestBody BookingDTO b) {
+        return service.alterBooking(id, b);
+    }
+
     @DeleteMapping("booking/{id}")
     public ResponseEntity<String> cancelBooking(@PathVariable long id) {
         return service.deleteBooking(id);
