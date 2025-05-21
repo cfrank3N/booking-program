@@ -48,7 +48,7 @@ public class GuestService {
         }
 
         repo.save(guestDTOToGuestDetailed(g));
-        return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " inserted!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " registered!");
     }
 
     public String deleteGuest(Long id) {
