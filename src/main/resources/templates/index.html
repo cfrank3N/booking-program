@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,20 +12,20 @@
         <div class="col-md-6 col-lg-4 mx-auto">
             <h2>Select a Date</h2>
 
-            <form th:action="@{/rooms}" method="get">
+            <form th:action="@{/rooms}" th:object="${availableRooms}" method="get">
                 <div class="mb-3">
                     <label for="startDate" class="form-label">From:</label>
-                    <input type="date" class="form-control my-2" id="startDate">
+                    <input type="date" class="form-control my-2" th:field="*{startDate}" id="startDate">
                     <label for="endDate" class="form-label">To:</label>
-                    <input type="date" class="form-control my-2" id="endDate">
+                    <input type="date" class="form-control my-2" th:field="*{endDate}" id="endDate">
                     <div class="form-text">Search for available rooms between these dates</div>
                     <label for="guests" class="form-label">Number of guests</label>
-                    <select class="form-select" id="guests">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                    <select class="form-select" th:field="*{guests}" id="guests">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
                 </div>
 
