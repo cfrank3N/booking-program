@@ -7,15 +7,16 @@ import backend1.bookingprogram.dtos.GuestDTO;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import backend1.bookingprogram.models.Guest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@RestController
+@Controller
 public class GuestController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(GuestController.class);
@@ -30,6 +31,22 @@ public class GuestController {
     public String deleteGuest(@PathVariable Long id) {
         return service.deleteGuest(id);
     }
+
+    @GetMapping("/guest/register")
+    public String viewHomepage(Model model) {
+        model.addAttribute("guest", new GuestDTO());
+        return "register-guest";
+    }
+
+    @PostMapping("/guest/register")
+    public String registerGuest(@Valid @ModelAttribute GuestDTO g, Model model) {
+        String message = service.createGuest(g).getBody();
+        model.addAttribute("success", message);
+        model.addAttribute("guest", new GuestDTO());
+        return "register-guest";
+    }
+
+
 
     @PostMapping("/guest")
     public ResponseEntity<String> createGuest(@Valid @RequestBody GuestDTO g) {
