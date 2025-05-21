@@ -1,5 +1,6 @@
 package backend1.bookingprogram.controllers;
 
+import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.service.RoomService;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,8 @@ public class RoomController {
     @PostMapping("/rooms")
     public String fetchAllRooms(@ModelAttribute RoomSearchDTO r,
                                 Model model) {
-        //List<RoomDTO> rooms = roomService.fetchAllRooms();
-        //model.addAttribute("rooms", rooms);
+        List<RoomDTO> rooms = roomService.fetchAllRooms();
+        model.addAttribute("rooms", rooms);
         model.addAttribute("startDate", r.getStartDate());
         model.addAttribute("endDate", r.getEndDate());
         model.addAttribute("guests", r.getGuests());

@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Available rooms</title>
+    <meta charset="UTF-8">
+    <title>Available rooms</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 <body>
-  <h1>It worked!</h1>
-  <h1 th:text="${startDate}"></h1>
-  <h1 th:text="${endDate}"></h1>
-  <h1 th:text="${guests}"></h1>
+<h1>It worked!</h1>
+<h1 th:text="${startDate}"></h1>
+<h1 th:text="${endDate}"></h1>
+<h1 th:text="${guests}"></h1>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Room List</h2>
+
+    <!-- Display message if no rooms found -->
+    <div th:if="${#lists.isEmpty(rooms)}" class="alert alert-info">
+        No rooms available at the moment.
+    </div>
+
+    <!-- Display room table if rooms exist -->
+    <div th:unless="${#lists.isEmpty(rooms)}">
+        <table class="table table-striped table-hover">
+            <thead class="table">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Room Number</th>
+                <th scope="col">Room Name</th>
+                <th scope="col">Room Size (km2)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${rooms}">
+                <th scope="row" th:text="${room.id}"></th>
+                <td th:text="${room.roomNumber}"></td>
+                <td th:text="${room.roomName}"></td>
+                <td th:text="${room.roomSize}"></td>
+                <!--
+                <td>
+                    <a th:href="@{/rooms/{id}(id=${room.id})}" class="btn btn-sm btn-info">View</a>
+                    <a th:href="@{/rooms/{id}/delete(id=${room.id})}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this room?');">Delete</a>
+                </td>
+                -->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
 </body>
 </html>
