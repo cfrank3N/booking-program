@@ -9,8 +9,7 @@
 <body>
 <div class="container mt-5 vh-100 d-flex flex-column justify-content-center align-items-center">
 
-    <p th:text="'Selected Dates: ' + ${dates.startDate} + '-' + ${dates.endDate} + ' Number of guests: ' + ${dates.guests}"></p>
-
+    <p th:text="${booking}"></p>
 
     <div class="mb-5">
         <div class="btn-group" role="group" aria-label="Basic example">
@@ -41,17 +40,21 @@
                 </thead>
                 <tbody>
                 <tr th:each="room : ${rooms}">
-                    <th scope="row" th:text="${room.id}"></th>
+                    <th scope="row" th:text="${room.roomId}"></th>
                     <td th:text="${room.roomNumber}"></td>
                     <td th:text="${room.roomName}"></td>
                     <td th:text="${room.roomSize}"></td>
 
                     <td>
-                        <form th:action="@{/rooms/select/guest}" method="post">
-                            <input type="hidden" name="id" th:value="${room.id}"/>
+                        <form th:action="@{/rooms/select/guest}" th:object="${booking}" method="post">
+                            <input type="hidden" name="roomId" th:value="${room.roomId}"/>
                             <input type="hidden" name="roomNumber" th:value="${room.roomNumber}"/>
                             <input type="hidden" name="roomName" th:value="${room.roomName}"/>
                             <input type="hidden" name="roomSize" th:value="${room.roomSize}"/>
+                            <input type="hidden" name="booking" th:field="*{dateFrom}"/>
+                            <input type="hidden" name="booking" th:field="*{dateUntil}"/>
+                            <input type="hidden" name="booking" th:field="*{numberOfGuests}"/>
+
                             <button type="submit" class="btn btn-sm btn-success">Select</button>
                         </form>
                     </td>

@@ -9,7 +9,7 @@ public class RoomMapper {
 
     public static RoomDTO roomToRoomDTODetailed(Room r) {
         return RoomDTO.builder()
-                .id(r.getId())
+                .roomId(r.getId())
                 .roomNumber(r.getRoomNumber())
                 .roomName(r.getRoomName())
                 .roomSize(r.getRoomSize())
@@ -22,7 +22,7 @@ public class RoomMapper {
 
     public static RoomDTO roomToRoomDTOMinimal(Room r) {
         return RoomDTO.builder()
-                .id(r.getId())
+                .roomId(r.getId())
                 .roomNumber(r.getRoomNumber())
                 .roomName(r.getRoomName())
                 .roomSize(r.getRoomSize())
@@ -31,7 +31,7 @@ public class RoomMapper {
 
     public static Room roomDTOToRoomMinimal(RoomDTO r) {
         return Room.builder()
-                .id(r.getId())
+                .id(r.getRoomId())
                 .roomNumber(r.getRoomNumber())
                 .build();
     }

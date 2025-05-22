@@ -19,20 +19,19 @@
     <div class="col-md-7 col-lg-5 my-5">
         <h2>Select a Date</h2>
 
-        <form th:action="@{/rooms}" th:object="${availableRooms}" method="post">
+        <form th:action="@{/rooms}" th:object="${booking}" method="post">
             <div class="mb-3">
                 <label for="startDate" class="form-label">From:</label>
-                <input type="date" class="form-control my-2" th:field="*{startDate}" id="startDate">
+                <input type="date" class="form-control my-2" th:field="*{dateFrom}" id="startDate">
                 <label for="endDate" class="form-label">To:</label>
-                <input type="date" class="form-control my-2" th:field="*{endDate}" id="endDate">
+                <input type="date" class="form-control my-2" th:field="*{dateUntil}" id="endDate">
                 <div class="form-text">Search for available rooms between these dates</div>
                 <label for="guests" class="form-label">Number of guests</label>
-                <select class="form-select" th:field="*{guests}" id="guests">
+                <select class="form-select" th:field="*{numberOfGuests}" id="guests">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
-                    <option value="5">5</option>
                 </select>
             </div>
 

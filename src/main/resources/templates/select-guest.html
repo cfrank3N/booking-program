@@ -16,7 +16,7 @@
             <button type="button" class="btn btn-success">Handle Rooms</button>
         </div>
     </div>
-    <p th:text="'Selected Room: ' + ${room.roomName} + ' (' + ${room.roomNumber} + ')'"></p>
+    <p th:text="${booking}"></p>
     <div class="col-md-7 col-lg-5 my-5">
         <h2 class="mb-4">Guest List</h2>
 
@@ -38,13 +38,30 @@
                 </thead>
                 <tbody>
                 <tr th:each="guest : ${guests}">
-                    <th scope="row" th:text="${guest.id}"></th>
+                    <th scope="row" th:text="${guest.guestId}"></th>
                     <td th:text="${guest.name}"></td>
                     <td th:text="${guest.email}"></td>
                     <td th:text="${guest.phonenumber}"></td>
 
                     <td>
-                        <button class="btn btn-sm btn-success">Select</button>
+                        <form th:action="@{/rooms/select/guest/confirmation}" th:object="${booking}" method="post">
+
+                            <!-- Guest -->
+                            <input type="hidden" name="guestId" th:value="${guest.guestId}"/>
+                            <input type="hidden" name="name" th:value="${guest.name}"/>
+                            <input type="hidden" name="email" th:value="${guest.email}"/>
+                            <input type="hidden" name="phonenumber" th:value="${guest.phonenumber}"/>
+                            <input type="hidden" name="booking" th:field="*{dateFrom}"/>
+                            <input type="hidden" name="booking" th:field="*{dateUntil}"/>
+                            <input type="hidden" name="booking" th:field="*{numberOfGuests}"/>
+                            <input type="hidden" name="booking" th:field="*{room.roomId}"/>
+                            <input type="hidden" name="booking" th:field="*{room.roomNumber}"/>
+                            <input type="hidden" name="booking" th:field="*{room.roomName}"/>
+                            <input type="hidden" name="booking" th:field="*{room.roomSize}"/>
+
+
+                            <button type="submit" class="btn btn-sm btn-success">Select</button>
+                        </form>
                     </td>
 
                 </tr>

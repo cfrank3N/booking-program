@@ -1,5 +1,6 @@
 package backend1.bookingprogram.controllers;
 
+import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.service.RoomService;
@@ -23,11 +24,12 @@ public class RoomController {
     }
 
     @PostMapping("/rooms")
-    public String fetchAllAvailableRooms(@ModelAttribute RoomSearchDTO r,
+    public String fetchAllAvailableRooms(@ModelAttribute BookingDTO booking,
                                 Model model) {
-        List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(r.getStartDate(), r.getEndDate());
+        System.out.println(booking);
+        List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(booking.getDateFrom(), booking.getDateUntil());
         model.addAttribute("rooms", rooms);
-        model.addAttribute("dates", r);
+        model.addAttribute("booking", booking);
         return SELECT_ROOM.getViewName();
     }
 }

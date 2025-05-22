@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class GuestDTO {
-    private Long id;
+    private Long guestId;
     @NotEmpty
     private String name;
     private String email;

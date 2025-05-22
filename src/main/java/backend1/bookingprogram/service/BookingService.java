@@ -42,7 +42,7 @@ public class BookingService {
     }
 
     public ResponseEntity<String> createBooking(BookingDTO booking) {
-
+        System.out.println(booking.getRoom());
         if (hasOverlappingDates(booking)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
         }
@@ -74,10 +74,10 @@ public class BookingService {
     public boolean hasOverlappingDates(BookingDTO booking){
         // check booking dates. the stream removes overlapping dates that are from the same booking when altering booking
         List<Booking> overlapping = bookingRepo.findByRoomIdAndDateUntilAfterAndDateFromBefore(
-                booking.getRoom().getId(),
+                booking.getRoom().getRoomId(),
                 booking.getDateFrom(),
                 booking.getDateUntil())
-                .stream().filter(b -> booking.getId() == null || !Objects.equals(b.getId(), booking.getId())).toList();
+                .stream().filter(b -> booking.getBookingId() == null || !Objects.equals(b.getId(), booking.getBookingId())).toList();
         // if overlapping dates in Room.getId() = fail.
         return !overlapping.isEmpty();
     }

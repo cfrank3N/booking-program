@@ -10,7 +10,7 @@ public class BookingMapper {
 
     public static BookingDTO bookingToBookingDTODetailed(Booking b) {
         return BookingDTO.builder()
-                .id(b.getId())
+                .bookingId(b.getId())
                 .dateFrom(b.getDateFrom())
                 .dateUntil(b.getDateUntil())
                 .numberOfGuests(b.getNumberOfGuests())
@@ -21,7 +21,7 @@ public class BookingMapper {
 
     public static BookingDTO bookingToBookingDTOMinimal(Booking b) {
         return BookingDTO.builder()
-                .id(b.getId())
+                .bookingId(b.getId())
                 .build();
     }
 
