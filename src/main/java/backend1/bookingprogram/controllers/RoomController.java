@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
+
 @Controller
 public class RoomController {
 
@@ -25,6 +27,6 @@ public class RoomController {
                                 Model model) {
         List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(r.getStartDate(), r.getEndDate());
         model.addAttribute("rooms", rooms);
-        return "available-rooms";
+        return SELECT_ROOM.getViewName();
     }
 }

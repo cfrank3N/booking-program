@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import static backend1.bookingprogram.enums.RoutingInfo.HOMEPAGE;
+
+
 @Controller
 public class HomeController {
 
@@ -13,7 +16,7 @@ public class HomeController {
         if (!model.containsAttribute("availableRooms")) {
             model.addAttribute("availableRooms", new RoomSearchDTO());
         }
-        return "index";
+        return HOMEPAGE.getViewName();
     }
 
 }

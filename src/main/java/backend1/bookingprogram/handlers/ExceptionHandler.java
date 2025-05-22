@@ -55,7 +55,7 @@ public class ExceptionHandler {
     public ModelAndView handleFaultyDate(RedirectAttributes redirectAttributes, FaultyDateException e) {
         redirectAttributes.addFlashAttribute("error", e.getMessage());
         redirectAttributes.addFlashAttribute("availableRooms", new RoomSearchDTO());
-        RedirectView redirectView = new RedirectView("/home", true); // `true` for context-relative
+        RedirectView redirectView = new RedirectView(HOMEPAGE.getUri(), true); // `true` for context-relative
         return new ModelAndView(redirectView);
     }
 
