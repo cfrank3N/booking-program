@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static backend1.bookingprogram.enums.RoutingInfo.REGISTER_GUEST;
+
 @Controller
 public class GuestController {
 
@@ -35,7 +37,7 @@ public class GuestController {
     @GetMapping("/guest/register")
     public String viewHomepage(Model model) {
         model.addAttribute("guest", new GuestDTO());
-        return "register-guest";
+        return REGISTER_GUEST.getViewName();
     }
 
     @PostMapping("/guest/register")
@@ -43,7 +45,7 @@ public class GuestController {
         String message = service.createGuest(g).getBody();
         model.addAttribute("success", message);
         model.addAttribute("guest", new GuestDTO());
-        return "register-guest";
+        return REGISTER_GUEST.getViewName();
     }
 
 

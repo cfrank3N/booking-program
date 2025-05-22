@@ -1,17 +1,18 @@
 package backend1.bookingprogram.controllers;
 
 import backend1.bookingprogram.dtos.RoomDTO;
-import backend1.bookingprogram.repositories.RoomRepository;
+import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.service.RoomService;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static backend1.bookingprogram.mappers.RoomMapper.roomToRoomDTODetailed;
+import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
 
-@RestController
+@Controller
 public class RoomController {
 
     private RoomService roomService;
@@ -21,9 +22,11 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @GetMapping("/rooms")
-    public List<RoomDTO> fetchAllRooms() {
-        return roomService.fetchAllRooms();
+    @PostMapping("/rooms")
+    public String fetchAllAvailableRooms(@ModelAttribute RoomSearchDTO r,
+                                Model model) {
+        List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(r.getStartDate(), r.getEndDate());
+        model.addAttribute("rooms", rooms);
+        return SELECT_ROOM.getViewName();
     }
-
 }

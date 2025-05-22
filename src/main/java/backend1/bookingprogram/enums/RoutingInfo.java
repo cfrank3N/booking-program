@@ -3,7 +3,8 @@ package backend1.bookingprogram.enums;
 public enum RoutingInfo {
 
     REGISTER_GUEST("/guest/register", "register-guest"),
-    HOMEPAGE("/", "index");
+    HOMEPAGE("/home", "index"),
+    SELECT_ROOM("/rooms", "available-rooms");
 
     private final String uri;
     private final String viewName;
