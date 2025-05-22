@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import static backend1.bookingprogram.enums.RoutingInfo.*;
 
@@ -50,20 +52,11 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(FaultyDateException.class)
-    public ModelAndView handleFaultyDate(HttpServletRequest req, FaultyDateException e) {
-        ModelAndView mav = new ModelAndView();
-        String uri = req.getRequestURI();
-        mav.addObject("error", e.getMessage());
-
-        if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
-            mav.setViewName(REGISTER_GUEST.getViewName());
-        } else if (uri.equalsIgnoreCase(SELECT_ROOM.getUri())) {
-            mav.addObject("availableRooms", new RoomSearchDTO());
-            mav.setViewName(HOMEPAGE.getViewName());
-        } else {
-            mav.setViewName(HOMEPAGE.getViewName());
-        }
-        return mav;
+    public ModelAndView handleFaultyDate(RedirectAttributes redirectAttributes, FaultyDateException e) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+        redirectAttributes.addFlashAttribute("availableRooms", new RoomSearchDTO());
+        RedirectView redirectView = new RedirectView("/home", true); // `true` for context-relative
+        return new ModelAndView(redirectView);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ResourceDoesntExistException.class)

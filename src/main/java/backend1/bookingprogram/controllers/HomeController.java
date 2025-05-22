@@ -10,7 +10,9 @@ public class HomeController {
 
     @GetMapping("/home")
     public String fetchHomePage(Model model) {
-        model.addAttribute("availableRooms", new RoomSearchDTO());
+        if (!model.containsAttribute("availableRooms")) {
+            model.addAttribute("availableRooms", new RoomSearchDTO());
+        }
         return "index";
     }
 
