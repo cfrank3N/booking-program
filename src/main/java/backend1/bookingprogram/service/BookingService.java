@@ -1,12 +1,18 @@
 package backend1.bookingprogram.service;
 
 
+import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
+import backend1.bookingprogram.mappers.BookingMapper;
+import backend1.bookingprogram.mappers.GuestMapper;
+import backend1.bookingprogram.mappers.RoomMapper;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.repositories.BookingRepository;
+import backend1.bookingprogram.repositories.GuestRepository;
+import backend1.bookingprogram.repositories.RoomRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,9 +30,13 @@ import static backend1.bookingprogram.mappers.RoomMapper.roomDTOToRoomMinimal;
 public class BookingService {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookingService.class);
     private final BookingRepository bookingRepo;
+    private final RoomRepository roomRepo;
+    private final GuestRepository guestRepo;
 
-    public BookingService(BookingRepository bookingRepo) {
+    public BookingService(BookingRepository bookingRepo, RoomRepository roomRepo, GuestRepository guestRepo) {
         this.bookingRepo = bookingRepo;
+        this.roomRepo = roomRepo;
+        this.guestRepo = guestRepo;
     }
 
     public List<BookingDTO> fetchAllBookings() {
@@ -41,14 +51,19 @@ public class BookingService {
         return ResponseEntity.ok("Booking " + id + "cancelled");
     }
 
-    public ResponseEntity<String> createBooking(BookingDTO booking) {
+    public ResponseEntity<String> createBooking(ActiveBookingDTO b) {
+        System.out.println(b);
+
+        BookingDTO booking = BookingMapper.activeBookingDTOToBookingDetailed(b);
+        booking.setRoom(RoomMapper.roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
+        booking.setGuest(GuestMapper.guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
 
         if (hasOverlappingDates(booking)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
         }
 
-        Booking b = bookingDTOToBookingDetailed(booking);
-        bookingRepo.save(b);
+        Booking bookToSave = bookingDTOToBookingDetailed(booking);
+        bookingRepo.save(bookToSave);
         return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
     }
 
@@ -74,10 +89,10 @@ public class BookingService {
     public boolean hasOverlappingDates(BookingDTO booking){
         // check booking dates. the stream removes overlapping dates that are from the same booking when altering booking
         List<Booking> overlapping = bookingRepo.findByRoomIdAndDateUntilAfterAndDateFromBefore(
-                booking.getRoom().getId(),
+                booking.getRoom().getRoomId(),
                 booking.getDateFrom(),
                 booking.getDateUntil())
-                .stream().filter(b -> booking.getId() == null || !Objects.equals(b.getId(), booking.getId())).toList();
+                .stream().filter(b -> booking.getBookingId() == null || !Objects.equals(b.getId(), booking.getBookingId())).toList();
         // if overlapping dates in Room.getId() = fail.
         return !overlapping.isEmpty();
     }

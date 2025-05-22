@@ -2,7 +2,7 @@ package backend1.bookingprogram.controllers;
 
 
 
-import backend1.bookingprogram.dtos.GuestDTO;
+import backend1.bookingprogram.dtos.*;
 
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
@@ -38,6 +38,21 @@ public class GuestController {
     public String viewHomepage(Model model) {
         model.addAttribute("guest", new GuestDTO());
         return REGISTER_GUEST.getViewName();
+    }
+
+    @PostMapping("/rooms/select/guest")
+    public String fetchAllGuests(@ModelAttribute ActiveBookingDTO booking,
+                                 @RequestParam Long rId,
+                                 Model model) {
+
+        booking.setRId(rId);
+        System.out.println("This is when we fetch the room");
+        System.out.println(booking);
+
+        List<GuestDTO> guests = service.fetchAllGuests();
+        model.addAttribute("booking", booking);
+        model.addAttribute("guests", guests);
+        return "select-guest";
     }
 
     @PostMapping("/guest/register")

@@ -9,7 +9,7 @@ public class GuestMapper {
 
     public static GuestDTO guestToGuestDTODetailed(Guest g) {
         return GuestDTO.builder()
-                .id(g.getId())
+                .guestId(g.getId())
                 .name(g.getName())
                 .email(g.getEmail())
                 .phonenumber(g.getPhonenumber())
@@ -19,7 +19,7 @@ public class GuestMapper {
 
     public static GuestDTO guestToGuestDTOMinimal(Guest g) {
         return GuestDTO.builder()
-                .id(g.getId())
+                .guestId(g.getId())
                 .name(g.getName())
                 .build();
     }
@@ -34,7 +34,7 @@ public class GuestMapper {
 
     public static Guest guestDTOToGuestMinimal(GuestDTO g) {
         return Guest.builder()
-                .id(g.getId())
+                .id(g.getGuestId())
                 .name(g.getName())
                 .build();
     }
