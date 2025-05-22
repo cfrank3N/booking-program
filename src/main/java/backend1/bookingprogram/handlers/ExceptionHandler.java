@@ -1,7 +1,9 @@
 package backend1.bookingprogram.handlers;
 
 import backend1.bookingprogram.dtos.GuestDTO;
+import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.exceptions.CantDeleteException;
+import backend1.bookingprogram.exceptions.FaultyDateException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
-import static backend1.bookingprogram.enums.RoutingInfo.HOMEPAGE;
-import static backend1.bookingprogram.enums.RoutingInfo.REGISTER_GUEST;
+import static backend1.bookingprogram.enums.RoutingInfo.*;
 
 @ControllerAdvice
 public class ExceptionHandler {
@@ -42,6 +43,23 @@ public class ExceptionHandler {
 
         if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
             mav.setViewName(REGISTER_GUEST.getViewName());
+        } else {
+            mav.setViewName(HOMEPAGE.getViewName());
+        }
+        return mav;
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(FaultyDateException.class)
+    public ModelAndView handleFaultyDate(HttpServletRequest req, FaultyDateException e) {
+        ModelAndView mav = new ModelAndView();
+        String uri = req.getRequestURI();
+        mav.addObject("error", e.getMessage());
+
+        if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
+            mav.setViewName(REGISTER_GUEST.getViewName());
+        } else if (uri.equalsIgnoreCase(SELECT_ROOM.getUri())) {
+            mav.addObject("availableRooms", new RoomSearchDTO());
+            mav.setViewName(HOMEPAGE.getViewName());
         } else {
             mav.setViewName(HOMEPAGE.getViewName());
         }

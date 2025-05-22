@@ -25,9 +25,6 @@ public class RoomController {
                                 Model model) {
         List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(r.getStartDate(), r.getEndDate());
         model.addAttribute("rooms", rooms);
-        model.addAttribute("startDate", r.getStartDate());
-        model.addAttribute("endDate", r.getEndDate());
-        model.addAttribute("guests", r.getGuests());
         return "available-rooms";
     }
 }

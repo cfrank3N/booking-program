@@ -7,32 +7,40 @@
           integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 <body>
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="row w-100">
-        <div class="col-md-6 col-lg-4 mx-auto">
-            <h2>Select a Date</h2>
-
-            <form th:action="@{/rooms}" th:object="${availableRooms}" method="post">
-                <div class="mb-3">
-                    <label for="startDate" class="form-label">From:</label>
-                    <input type="date" class="form-control my-2" th:field="*{startDate}" id="startDate">
-                    <label for="endDate" class="form-label">To:</label>
-                    <input type="date" class="form-control my-2" th:field="*{endDate}" id="endDate">
-                    <div class="form-text">Search for available rooms between these dates</div>
-                    <label for="guests" class="form-label">Number of guests</label>
-                    <select class="form-select" th:field="*{guests}" id="guests">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-success">Search</button>
-            </form>
+<div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+    <div class="mb-5">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-success">Handle Bookings</button>
+            <a th:href="@{/guest/register}" class="btn btn-success">Handle Guests</a>
+            <button type="button" class="btn btn-success">Handle Rooms</button>
         </div>
     </div>
+
+    <div class="col-md-7 col-lg-5 my-5">
+        <h2>Select a Date</h2>
+
+        <form th:action="@{/rooms}" th:object="${availableRooms}" method="post">
+            <div class="mb-3">
+                <label for="startDate" class="form-label">From:</label>
+                <input type="date" class="form-control my-2" th:field="*{startDate}" id="startDate">
+                <label for="endDate" class="form-label">To:</label>
+                <input type="date" class="form-control my-2" th:field="*{endDate}" id="endDate">
+                <div class="form-text">Search for available rooms between these dates</div>
+                <label for="guests" class="form-label">Number of guests</label>
+                <select class="form-select" th:field="*{guests}" id="guests">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Search</button>
+            <p class="text-center" th:if="${error}" th:text="${error}" style="color:red;"></p>
+        </form>
+    </div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"

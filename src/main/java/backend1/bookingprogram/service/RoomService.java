@@ -1,6 +1,7 @@
 package backend1.bookingprogram.service;
 
 import backend1.bookingprogram.dtos.RoomDTO;
+import backend1.bookingprogram.exceptions.FaultyDateException;
 import backend1.bookingprogram.repositories.RoomRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,11 @@ public class RoomService {
     }
 
     public List<RoomDTO> fetchAllAvailableRooms(LocalDate startDate, LocalDate endDate) {
+
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new FaultyDateException("From date can't be in the past!");
+        }
+
         return  roomRepository.findAll()
                 .stream()
                 .filter(room -> room.getBookings()
