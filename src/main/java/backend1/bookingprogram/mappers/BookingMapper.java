@@ -1,5 +1,6 @@
 package backend1.bookingprogram.mappers;
 
+import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.models.Booking;
 
@@ -32,6 +33,14 @@ public class BookingMapper {
                 .numberOfGuests(b.getNumberOfGuests())
                 .guest(guestDTOToGuestMinimal(b.getGuest()))
                 .room(roomDTOToRoomMinimal(b.getRoom()))
+                .build();
+    }
+
+    public static BookingDTO activeBookingDTOToBookingDetailed(ActiveBookingDTO b) {
+        return BookingDTO.builder()
+                .dateFrom(b.getDateFrom())
+                .dateUntil(b.getDateUntil())
+                .numberOfGuests(b.getNumberOfGuests())
                 .build();
     }
 }

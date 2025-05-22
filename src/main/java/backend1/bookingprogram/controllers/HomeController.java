@@ -1,5 +1,6 @@
 package backend1.bookingprogram.controllers;
 
+import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.dtos.RoomSearchDTO;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ public class HomeController {
     @GetMapping("/home")
     public String fetchHomePage(Model model) {
         if (!model.containsAttribute("availableRooms")) {
-            model.addAttribute("booking", new BookingDTO());
+            model.addAttribute("booking", new ActiveBookingDTO());
         }
         return HOMEPAGE.getViewName();
     }

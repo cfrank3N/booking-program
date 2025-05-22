@@ -1,9 +1,6 @@
 package backend1.bookingprogram.controllers;
 
-import backend1.bookingprogram.dtos.BookingDTO;
-import backend1.bookingprogram.dtos.GuestDTO;
-import backend1.bookingprogram.dtos.RoomDTO;
-import backend1.bookingprogram.dtos.RoomSearchDTO;
+import backend1.bookingprogram.dtos.*;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.service.BookingService;
 import org.slf4j.LoggerFactory;
@@ -27,12 +24,12 @@ public class BookingController {
 
 
     @PostMapping("/rooms/select/guest/confirmation")
-    public String createBooking(@ModelAttribute BookingDTO booking,
-                                                @ModelAttribute GuestDTO guest,
+    public String createBooking(@ModelAttribute ActiveBookingDTO booking,
+                                                @RequestParam Long gId,
                                                 Model model) {
-        System.out.println(guest);
+        System.out.println(gId);
         System.out.println(booking);
-        booking.setGuest(guest);
+        booking.setGId(gId);
         System.out.println(booking);
         service.createBooking(booking);
         return "success";

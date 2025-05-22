@@ -47,10 +47,7 @@
 
                     <td>
                         <form th:action="@{/rooms/select/guest}" th:object="${booking}" method="post">
-                            <input type="hidden" name="roomId" th:value="${room.roomId}"/>
-                            <input type="hidden" name="roomNumber" th:value="${room.roomNumber}"/>
-                            <input type="hidden" name="roomName" th:value="${room.roomName}"/>
-                            <input type="hidden" name="roomSize" th:value="${room.roomSize}"/>
+                            <input type="hidden" name="rId" th:value="${room.roomId}"/>
                             <input type="hidden" name="booking" th:field="*{dateFrom}"/>
                             <input type="hidden" name="booking" th:field="*{dateUntil}"/>
                             <input type="hidden" name="booking" th:field="*{numberOfGuests}"/>

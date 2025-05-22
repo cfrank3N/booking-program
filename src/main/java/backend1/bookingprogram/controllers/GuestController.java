@@ -2,11 +2,8 @@ package backend1.bookingprogram.controllers;
 
 
 
-import backend1.bookingprogram.dtos.BookingDTO;
-import backend1.bookingprogram.dtos.GuestDTO;
+import backend1.bookingprogram.dtos.*;
 
-import backend1.bookingprogram.dtos.RoomDTO;
-import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -44,11 +41,11 @@ public class GuestController {
     }
 
     @PostMapping("/rooms/select/guest")
-    public String fetchAllGuests(@ModelAttribute BookingDTO booking,
-                                 @ModelAttribute RoomDTO room,
+    public String fetchAllGuests(@ModelAttribute ActiveBookingDTO booking,
+                                 @RequestParam Long rId,
                                  Model model) {
 
-        booking.setRoom(room);
+        booking.setRId(rId);
         System.out.println("This is when we fetch the room");
         System.out.println(booking);
 

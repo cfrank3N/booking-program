@@ -47,17 +47,11 @@
                         <form th:action="@{/rooms/select/guest/confirmation}" th:object="${booking}" method="post">
 
                             <!-- Guest -->
-                            <input type="hidden" name="guestId" th:value="${guest.guestId}"/>
-                            <input type="hidden" name="name" th:value="${guest.name}"/>
-                            <input type="hidden" name="email" th:value="${guest.email}"/>
-                            <input type="hidden" name="phonenumber" th:value="${guest.phonenumber}"/>
+                            <input type="hidden" name="gId" th:value="${guest.guestId}"/>
                             <input type="hidden" name="booking" th:field="*{dateFrom}"/>
                             <input type="hidden" name="booking" th:field="*{dateUntil}"/>
                             <input type="hidden" name="booking" th:field="*{numberOfGuests}"/>
-                            <input type="hidden" name="booking" th:field="*{room.roomId}"/>
-                            <input type="hidden" name="booking" th:field="*{room.roomNumber}"/>
-                            <input type="hidden" name="booking" th:field="*{room.roomName}"/>
-                            <input type="hidden" name="booking" th:field="*{room.roomSize}"/>
+                            <input type="hidden" name="booking" th:field="*{rId}"/>
 
 
                             <button type="submit" class="btn btn-sm btn-success">Select</button>
