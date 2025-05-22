@@ -27,6 +27,7 @@ public class RoomController {
                                 Model model) {
         List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(r.getStartDate(), r.getEndDate());
         model.addAttribute("rooms", rooms);
+        model.addAttribute("dates", r);
         return SELECT_ROOM.getViewName();
     }
 }
