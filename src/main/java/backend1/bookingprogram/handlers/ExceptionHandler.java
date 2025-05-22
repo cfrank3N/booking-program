@@ -26,7 +26,7 @@ public class ExceptionHandler {
         String uri = req.getRequestURI();
         mav.addObject("error", e.getMessage());
 
-        if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
+        if (uri.contains(REGISTER_GUEST.getUri())) {
             mav.addObject("guest", new GuestDTO());
             mav.setViewName(REGISTER_GUEST.getViewName());
         } else {
@@ -43,7 +43,7 @@ public class ExceptionHandler {
         mav.addObject("error", e.getBody());
         mav.addObject("guest", new GuestDTO());
 
-        if (uri.equalsIgnoreCase(REGISTER_GUEST.getUri())) {
+        if (uri.contains(REGISTER_GUEST.getUri())) {
             mav.setViewName(REGISTER_GUEST.getViewName());
         } else {
             mav.setViewName(HOMEPAGE.getViewName());
