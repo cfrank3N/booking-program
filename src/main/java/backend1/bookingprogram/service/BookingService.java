@@ -52,12 +52,12 @@ public class BookingService {
     }
 
     public ResponseEntity<String> createBooking(ActiveBookingDTO b) {
-        System.out.println(b);
 
         BookingDTO booking = BookingMapper.activeBookingDTOToBookingDetailed(b);
         booking.setRoom(RoomMapper.roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
         booking.setGuest(GuestMapper.guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
 
+        //todo:I think this check is unnecessary, its already been performed in RoomService.fetchAllAvailableRooms
         if (hasOverlappingDates(booking)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
         }
@@ -92,7 +92,10 @@ public class BookingService {
                 booking.getRoom().getRoomId(),
                 booking.getDateFrom(),
                 booking.getDateUntil())
-                .stream().filter(b -> booking.getBookingId() == null || !Objects.equals(b.getId(), booking.getBookingId())).toList();
+                .stream()
+                .filter(b -> booking.getBookingId() == null || !Objects.equals(b.getId(), booking.getBookingId()))
+                .filter(room -> booking.getRoom().getRoomSize()>=RoomService.getMinRoomSize(booking.getNumberOfGuests()))
+                .toList();
         // if overlapping dates in Room.getId() = fail.
         return !overlapping.isEmpty();
     }

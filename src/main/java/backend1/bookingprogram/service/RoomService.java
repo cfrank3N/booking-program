@@ -20,22 +20,16 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    // room size determines type of room. //TODO return type or something later for business logic in booking.
-    public String classifyRoom(Long roomId) {
-        return roomRepository.findById(roomId).map(room -> switch (getRoomType(room.getRoomSize())) {
-            case 1 -> "Single Room (1 bed)";
-            case 2 -> "Double room (1-2 beds)";
-            default -> "Suite (up to 3 beds)";
-        }).orElse("Room not found");
+    public static int getMinRoomSize(int numberOfGuests) {
+        return switch (numberOfGuests) {
+            case 4 -> 40;
+            case 3 -> 30;
+            case 2 -> 20;
+            default -> 10;
+        };
     }
 
-    private int getRoomType(int size) {
-        if (size < 20) return 1;
-        else if (size < 40) return 2;
-        else return 3;
-    }
-
-    public List<RoomDTO> fetchAllAvailableRooms(LocalDate startDate, LocalDate endDate) {
+    public List<RoomDTO> fetchAllAvailableRooms(LocalDate startDate, LocalDate endDate, int numberOfGuests) {
 
         if (startDate == null || endDate == null) {
             throw new FaultyDateException("Both dates must be filled out!");
@@ -43,6 +37,7 @@ public class RoomService {
         if (startDate.isBefore(LocalDate.now())) {
             throw new FaultyDateException("From date can't be in the past!");
         }
+        int minRoomSize = getMinRoomSize(numberOfGuests);
 
         return  roomRepository.findAll()
                 .stream()
@@ -50,6 +45,7 @@ public class RoomService {
                         .stream()
                         .noneMatch(booking -> booking.getDateFrom().isBefore(endDate) &&
                                 booking.getDateUntil().isAfter(startDate)))
+                .filter(room -> room.getRoomSize()>=minRoomSize)
                 .map(room -> roomToRoomDTODetailed(room)).toList();
     }
 
