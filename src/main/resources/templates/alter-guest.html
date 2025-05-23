@@ -24,6 +24,7 @@
       <div class="mb-3">
         <label>Email:</label>
         <input type="email" th:field="*{email}" class="form-control"/>
+        <p th:if="${error}" class="text-danger mt-2" th:text="${error}"></p>
       </div>
 
       <div class="mb-3">

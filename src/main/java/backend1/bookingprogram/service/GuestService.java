@@ -73,19 +73,22 @@ public class GuestService {
 
     @Transactional
     public ResponseEntity<String> alterGuest(Long id, GuestDTO g) {
-        if (repo.findByEmail(g.getEmail()).isPresent()) {
-            throw new ResourceAlreadyExistsException("Email is taken!");
-        }
-        repo.findById(id).ifPresent(guest -> {
+        repo.findByEmail(g.getEmail()).ifPresent(existing -> {
+            if (!existing.getId().equals(id)) {
+                throw new ResourceAlreadyExistsException("Email address is used by another guest");
+            }
+        });
+
+        Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
 
             guest.setName(g.getName());
             guest.setEmail(g.getEmail());
             guest.setPhonenumber(g.getPhonenumber());
 
-        });
 
         return ResponseEntity.ok("User updated");
     }
+
 
 
     public GuestDTO fetchGuestById(Long id) {

@@ -5,6 +5,7 @@ package backend1.bookingprogram.controllers;
 import backend1.bookingprogram.dtos.*;
 
 import backend1.bookingprogram.enums.RoutingInfo;
+import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -98,10 +99,17 @@ public class GuestController {
     public String alterGuestSubmit(@PathVariable("id") Long id,
                                    @ModelAttribute("guest")
                                    @Valid GuestDTO guest,
+                                   Model model,
                                    RedirectAttributes ra) {
-        service.alterGuest(id,guest);
-        ra.addFlashAttribute("success", "Guest updated");
-        return "redirect:/guest/alter/" + id;
+        try {
+            service.alterGuest(id, guest);
+            ra.addFlashAttribute("success", "Guest updated");
+            return "redirect:/guest/alter/" + id;
+        } catch (ResourceAlreadyExistsException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("guest", guest);
+            return "alter-guest";
+        }
     }
 
     @GetMapping("guest/alter")
