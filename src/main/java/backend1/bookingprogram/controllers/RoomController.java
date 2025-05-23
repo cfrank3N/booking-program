@@ -31,4 +31,6 @@ public class RoomController {
         model.addAttribute("booking", booking);
         return SELECT_ROOM.getViewName();
     }
+
+
 }

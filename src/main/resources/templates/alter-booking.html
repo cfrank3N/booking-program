@@ -22,7 +22,13 @@
             <input type="date" th:field="*{dateFrom}" class="form-control mb-3" />
 
             <label for="dateUntil">Dates:</label>
-            <input type="date" th:field="*{dateUntil}" id="x" class="form-control mb-3" />
+            <input type="date" th:field="*{dateUntil}" class="form-control mb-3" />
+
+            <label for="room">Room:</label>
+            <input type="room" th:field="*{room}" class="form-control mb-3" />
+
+            <label for="numberOfGuests">Number of guests:</label>
+            <input type="number" min="1" max="10" th:field="*{numberOfGuests}" class="form-control mb-3" />
 
 
             <button type="submit" class="btn btn-primary">Confirm changes</button>

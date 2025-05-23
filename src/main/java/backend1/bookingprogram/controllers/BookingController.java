@@ -4,6 +4,7 @@ import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.service.BookingService;
+import backend1.bookingprogram.service.RoomService;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,11 @@ public class BookingController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookingController.class);
     private final BookingService service;
+    private final RoomService roomService;
 
-    public BookingController(BookingService service) {
+    public BookingController(BookingService service, RoomService roomService) {
         this.service = service;
+        this.roomService = roomService;
     }
 
 
@@ -70,6 +73,7 @@ public class BookingController {
     public String showBookingForm(@PathVariable Long id, Model model) {
         BookingDTO booking = service.fetchBookingById(id);
         model.addAttribute("booking", booking);
+        model.addAttribute("rooms", roomService.fetchAllRooms());
         return "alter-booking";
     }
 

@@ -4,12 +4,15 @@ package backend1.bookingprogram.service;
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 
+import backend1.bookingprogram.dtos.GuestDTO;
+import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.mappers.BookingMapper;
 import backend1.bookingprogram.mappers.GuestMapper;
 import backend1.bookingprogram.mappers.RoomMapper;
 import backend1.bookingprogram.models.Booking;
+import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
@@ -109,4 +112,5 @@ public class BookingService {
                 .map(BookingMapper::bookingToBookingDTODetailed)
                 .orElseThrow(() -> new ResourceDoesntExistException("Booking with ID: " +id +"not found"));
     }
+
 }
