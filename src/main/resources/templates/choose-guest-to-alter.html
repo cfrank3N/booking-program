@@ -42,24 +42,12 @@
                     </button>
 
                 </form>
-                <a th:href="@{/guest/alter/{id}(id=${g.guestId})}" class="btn btn-sm btn-warning">See active bookings</a>
+                <a th:href="@{/guest/bookings/{id}(id=${g.guestId})}" class="btn btn-sm btn-dark">See active bookings</a>
 
-                <!--                <a th:href="@{/guest/delete/{id}(id=${g.guestId})}" class="btn btn-sm btn-danger">Delete</a>-->
             </td>
         </tr>
         </tbody>
     </table>
-
-    <!--    <ul class="list-group">-->
-    <!--      <li class="list-group-item"-->
-    <!--          th:each="g : ${guests}">-->
-    <!--        <span th:text="|${g.name} (${g.email}) (${g.phonenumber}) (${g.guestId})|"></span>-->
-    <!--        <a th:href="@{/guest/alter/{id}(id=${g.guestId})}"-->
-    <!--           class="btn btn-sm btn-warning float-end">-->
-    <!--          Alter-->
-    <!--        </a>-->
-    <!--      </li>-->
-    <!--    </ul>-->
 
     <div class="mt-3">
         <a th:href="@{/guest/handle}" class="btn btn-secondary">Back</a>

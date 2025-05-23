@@ -6,6 +6,7 @@ import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.mappers.GuestMapper;
+import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.repositories.GuestRepository;
 import jakarta.transaction.Transactional;
@@ -63,6 +64,12 @@ public class GuestService {
     public boolean guestHasActiveBookings(Long guestID) {
         return repo.findById(guestID).get().getBookings()
                 .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
+    }
+
+    public List<Booking> showActiveBookings(Long guestID) {
+        Guest guest = repo.findById(guestID).orElseThrow(() -> new ResourceDoesntExistException("Guest not found"));
+
+        return guest.getBookings().stream().filter(booking -> LocalDate.now().isBefore(booking.getDateUntil())).toList();
     }
 
     @Transactional

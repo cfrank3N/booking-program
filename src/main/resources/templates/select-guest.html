@@ -12,8 +12,9 @@
     <div class="mb-5">
         <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-success">Handle Bookings</button>
-            <button type="button" class="btn btn-success">Handle Guests</button>
+            <a th:href="@{/guest/handle}" class="btn btn-success">Handle Guests</a>
             <button type="button" class="btn btn-success">Handle Rooms</button>
+
         </div>
     </div>
     <p th:text="${booking}"></p>
@@ -51,7 +52,7 @@
                             <input type="hidden" name="booking" th:field="*{dateFrom}"/>
                             <input type="hidden" name="booking" th:field="*{dateUntil}"/>
                             <input type="hidden" name="booking" th:field="*{numberOfGuests}"/>
-                            <input type="hidden" name="booking" th:field="*{rId}"/>
+                            <input type="hidden" name="booking" th:field="*{Id}"/>
 
 
                             <button type="submit" class="btn btn-sm btn-success">Select</button>

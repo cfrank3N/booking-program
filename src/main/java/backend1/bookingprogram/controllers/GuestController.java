@@ -121,4 +121,11 @@ public class GuestController {
         model.addAttribute("success", "Guest deleted successfully");
         return "choose-guest-to-alter";
     }
+
+    @GetMapping("guest/bookings/{id}")
+    public String showActiveBookingsOfGuest(@PathVariable Long id, Model model) {
+        model.addAttribute("bookings", service.showActiveBookings(id));
+        model.addAttribute("guest", service.fetchGuestById(id));
+        return "active-bookings";
+    }
 }
