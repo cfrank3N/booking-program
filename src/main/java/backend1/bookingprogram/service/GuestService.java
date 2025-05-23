@@ -6,6 +6,7 @@ import backend1.bookingprogram.dtos.GuestDTO;
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
+import backend1.bookingprogram.mappers.GuestMapper;
 import backend1.bookingprogram.models.Guest;
 
 import backend1.bookingprogram.repositories.GuestRepository;
@@ -86,6 +87,12 @@ public class GuestService {
         return ResponseEntity.ok("User updated");
     }
 
+
+    public GuestDTO fetchGuestById(Long id) {
+        return repo.findById(id)
+                .map(GuestMapper::guestToGuestDTODetailed)
+                .orElseThrow(() -> new ResourceDoesntExistException("No Guest " +id));
+    }
 
 
 }

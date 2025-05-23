@@ -12,8 +12,8 @@
 <body>
   <h2 class="text-center">Alter Guest</h2>
   <div class="container">
-    <form th:action="@{/guest/alter}" th:object="${guest}" method="post">
-      <!-- make sure your DTO has an 'id' property -->
+    <form th:action="@{/guest/alter/{id}(id=${guest.guestId})}" th:object="${guest}" method="post">
+
       <input type="hidden" th:field="*{guestId}"/>
 
       <div class="mb-3">
@@ -31,6 +31,7 @@
         <input type="tel" th:field="*{phonenumber}" class="form-control"/>
       </div>
 
+      <a th:href="@{/guest/handle}" class="btn btn-secondary">Back</a>
       <button type="submit" class="btn btn-warning">Update Guest</button>
       <a th:href="@{/home}" class="btn btn-secondary">Home</a>
 

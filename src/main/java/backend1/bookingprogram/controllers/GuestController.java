@@ -4,6 +4,7 @@ package backend1.bookingprogram.controllers;
 
 import backend1.bookingprogram.dtos.*;
 
+import backend1.bookingprogram.enums.RoutingInfo;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -81,27 +82,31 @@ public class GuestController {
     }
 
     @GetMapping("/guest/handle")
-    public String handleGuest() {
+    public String handleGuest(Model model) {
+        model.addAttribute("guests", service.fetchAllGuests());
         return "handle-guest";
     }
 
-//    @GetMapping("/guest/alter")
-//    public String alterGuestForm(Model model) {
-//        model.addAttribute("guest", new GuestDTO());
-//        return "alter-guest";
-//    }
-
-    @GetMapping("/guest/alter")
-    public String showAlterForm(Model model) {
-        model.addAttribute("guest", new GuestDTO());
+    @GetMapping("/guest/alter/{id}")
+    public String showAlterForm(@PathVariable("id") Long id, Model model) {
+        GuestDTO dto = service.fetchGuestById(id);
+        model.addAttribute("guest", dto);
         return "alter-guest";
     }
 
-    @PostMapping("/guest/alter")
-    public String alterGuestSubmit(@ModelAttribute("guest") @Valid GuestDTO guest, RedirectAttributes ra) {
-        service.alterGuest(guest.getGuestId(),guest);
+    @PostMapping("/guest/alter/{id}")
+    public String alterGuestSubmit(@PathVariable("id") Long id,
+                                   @ModelAttribute("guest")
+                                   @Valid GuestDTO guest,
+                                   RedirectAttributes ra) {
+        service.alterGuest(id,guest);
         ra.addFlashAttribute("success", "Guest updated");
-        return "redirect:/guest/alter";
+        return "redirect:/guest/alter/" + id;
     }
 
+    @GetMapping("guest/alter")
+    public String chooseGuestToAlter(Model model) {
+        model.addAttribute("guests", service.fetchAllGuests());
+        return "choose-guest-to-alter";
+    }
 }
