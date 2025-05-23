@@ -77,12 +77,6 @@ public class GuestController {
         return service.fetchAllGuests();
     }
 
-    @GetMapping("/guest/handle")
-    public String handleGuest(Model model) {
-        model.addAttribute("guests", service.fetchAllGuests());
-        return "handle-guest";
-    }
-
     @GetMapping("/guest/alter/{id}")
     public String showAlterForm(@PathVariable("id") Long id, Model model) {
         GuestDTO dto = service.fetchGuestById(id);
