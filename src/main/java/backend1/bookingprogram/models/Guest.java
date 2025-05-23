@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Guest {
     @Email
     @Column(unique = true)
     private String email;
+
     private String phonenumber;
     @OneToMany(mappedBy = "guest")
     private List<Booking> bookings;
@@ -31,5 +33,15 @@ public class Guest {
         this.email = email;
         this.phonenumber = phonenumber;
         this.bookings = bookings;
+    }
+
+    @Override
+    public String toString() {
+        return "Guest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
+                '}';
     }
 }

@@ -81,10 +81,13 @@ public class GuestService {
         });
 
         Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
+        log.info("Altering guest {}", guest );
 
         guest.setName(g.getName());
         guest.setEmail(g.getEmail());
         guest.setPhonenumber(g.getPhonenumber());
+
+        log.info("Guest altered {}", guest);
 
         return ResponseEntity.ok("User updated");
     }

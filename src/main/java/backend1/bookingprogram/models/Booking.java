@@ -38,4 +38,14 @@ public class Booking {
         this.guest = guest;
         this.room = room;
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "numberOfGuests=" + numberOfGuests +
+                ", dateUntil=" + dateUntil +
+                ", dateFrom=" + dateFrom +
+                ", id=" + id +
+                '}';
+    }
 }

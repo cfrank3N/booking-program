@@ -64,6 +64,9 @@ public class BookingService {
 
         Booking bookToSave = bookingDTOToBookingDetailed(booking);
         bookingRepo.save(bookToSave);
+
+        log.info("booking created: {}", bookToSave);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
     }
 
