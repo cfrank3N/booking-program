@@ -23,6 +23,7 @@ public class BookingController {
     }
 
 
+    // fixa här
     @PostMapping("/rooms/select/guest/confirmation")
     public String createBooking(@ModelAttribute ActiveBookingDTO booking,
                                                 @RequestParam Long gId,
