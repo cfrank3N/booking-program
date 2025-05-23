@@ -79,7 +79,6 @@ public class GuestService {
         guest.setEmail(g.getEmail());
         guest.setPhonenumber(g.getPhonenumber());
 
-
         return ResponseEntity.ok("User updated");
     }
 
