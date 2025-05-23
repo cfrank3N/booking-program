@@ -31,11 +31,6 @@ public class GuestController {
     public GuestController(GuestService service) {
         this.service = service;
     }
-    @Transactional
-    @DeleteMapping("/guest/{id}/delete")
-    public String deleteGuest(@PathVariable Long id) {
-        return service.deleteGuest(id);
-    }
 
     @GetMapping("/guest/register")
     public String viewHomepage(Model model) {
@@ -115,6 +110,15 @@ public class GuestController {
     @GetMapping("guest/alter")
     public String chooseGuestToAlter(Model model) {
         model.addAttribute("guests", service.fetchAllGuests());
+        return "choose-guest-to-alter";
+    }
+
+    @Transactional
+    @DeleteMapping("/guest/delete/{id}")
+    public String deleteGuest(@PathVariable Long id, Model model) {
+        service.deleteGuest(id);
+        model.addAttribute("guests", service.fetchAllGuests());
+        model.addAttribute("success", "Guest deleted successfully");
         return "choose-guest-to-alter";
     }
 }

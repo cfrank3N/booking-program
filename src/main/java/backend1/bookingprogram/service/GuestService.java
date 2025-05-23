@@ -2,13 +2,11 @@ package backend1.bookingprogram.service;
 
 
 import backend1.bookingprogram.dtos.GuestDTO;
-
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.mappers.GuestMapper;
 import backend1.bookingprogram.models.Guest;
-
 import backend1.bookingprogram.repositories.GuestRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -16,14 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 import static backend1.bookingprogram.mappers.GuestMapper.guestDTOToGuestDetailed;
 import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
-
-
-import java.time.LocalDate;
 
 
 @Service
@@ -52,7 +47,7 @@ public class GuestService {
         return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " registered!");
     }
 
-    public String deleteGuest(Long id) {
+    public void deleteGuest(Long id) {
         if (repo.findById(id).isEmpty()) {
             throw new ResourceDoesntExistException("Guest doesn't exist");
         }
@@ -62,7 +57,6 @@ public class GuestService {
         else {
             log.info("Guest with ID: {} was deleted.", id);
             repo.deleteById(id);
-            return " guest(s) deleted.";
         }
     }
 
@@ -81,21 +75,18 @@ public class GuestService {
 
         Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
 
-            guest.setName(g.getName());
-            guest.setEmail(g.getEmail());
-            guest.setPhonenumber(g.getPhonenumber());
+        guest.setName(g.getName());
+        guest.setEmail(g.getEmail());
+        guest.setPhonenumber(g.getPhonenumber());
 
 
         return ResponseEntity.ok("User updated");
     }
 
 
-
     public GuestDTO fetchGuestById(Long id) {
         return repo.findById(id)
                 .map(GuestMapper::guestToGuestDTODetailed)
-                .orElseThrow(() -> new ResourceDoesntExistException("No Guest " +id));
+                .orElseThrow(() -> new ResourceDoesntExistException("No Guest " + id));
     }
-
-
 }
