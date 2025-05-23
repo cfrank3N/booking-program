@@ -24,7 +24,7 @@ import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetaile
 
 @Service
 public class GuestService {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookingService.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(GuestService.class);
     private final GuestRepository repo;
 
     public GuestService(GuestRepository repo) {
@@ -34,7 +34,7 @@ public class GuestService {
     public List<GuestDTO> fetchAllGuests() {
         return repo.findAll()
                 .stream()
-                .map(g -> guestToGuestDTODetailed(g))
+                .map(GuestMapper::guestToGuestDTODetailed)
                 .toList();
     }
 
@@ -81,13 +81,13 @@ public class GuestService {
         });
 
         Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
-        log.info("Altering guest {}", guest );
+        log.info("Altering {}", guest );
 
         guest.setName(g.getName());
         guest.setEmail(g.getEmail());
         guest.setPhonenumber(g.getPhonenumber());
 
-        log.info("Guest altered {}", guest);
+        log.info("Altered {}", guest);
 
         return ResponseEntity.ok("User updated");
     }

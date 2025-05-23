@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static backend1.bookingprogram.mappers.BookingMapper.bookingDTOToBookingDetailed;
-import static backend1.bookingprogram.mappers.BookingMapper.bookingToBookingDTODetailed;
 import static backend1.bookingprogram.mappers.RoomMapper.roomDTOToRoomMinimal;
 
 @Service
@@ -40,7 +39,7 @@ public class BookingService {
     }
 
     public List<BookingDTO> fetchAllBookings() {
-        return bookingRepo.findAll().stream().map(booking -> bookingToBookingDTODetailed(booking)).toList();
+        return bookingRepo.findAll().stream().map(BookingMapper::bookingToBookingDTODetailed).toList();
     }
 
     public ResponseEntity<String> deleteBooking(Long id) {
