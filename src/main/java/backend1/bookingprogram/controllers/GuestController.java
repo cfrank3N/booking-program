@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -63,8 +64,6 @@ public class GuestController {
         return REGISTER_GUEST.getViewName();
     }
 
-
-
     @PostMapping("/guest")
     public ResponseEntity<String> createGuest(@Valid @RequestBody GuestDTO g) {
         return service.createGuest(g);
@@ -79,7 +78,30 @@ public class GuestController {
     @GetMapping("/guest")
     public List<GuestDTO> getGuests() {
         return service.fetchAllGuests();
+    }
 
+    @GetMapping("/guest/handle")
+    public String handleGuest() {
+        return "handle-guest";
+    }
+
+//    @GetMapping("/guest/alter")
+//    public String alterGuestForm(Model model) {
+//        model.addAttribute("guest", new GuestDTO());
+//        return "alter-guest";
+//    }
+
+    @GetMapping("/guest/alter")
+    public String showAlterForm(Model model) {
+        model.addAttribute("guest", new GuestDTO());
+        return "alter-guest";
+    }
+
+    @PostMapping("/guest/alter")
+    public String alterGuestSubmit(@ModelAttribute("guest") @Valid GuestDTO guest, RedirectAttributes ra) {
+        service.alterGuest(guest.getGuestId(),guest);
+        ra.addFlashAttribute("success", "Guest updated");
+        return "redirect:/guest/alter";
     }
 
 }

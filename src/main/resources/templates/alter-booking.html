@@ -7,26 +7,27 @@
           integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 <body>
-<h2 class="text-center">Register guest</h2>
+<h2 class="text-center">Alter booking</h2>
 <div class="container">
     <div class="form-group">
-        <form th:action="@{/guest/register}" th:object="${guest}" method="post">
+        <form th:action="@{/booking/alter}" th:object="${x}" method="post">
+            <!--            ändra till booking-->
 
             <p class="text-center" th:if="${error}" th:text="${error}" style="color:red;"></p>
             <p class="text-center" th:if="${error}" th:text="${url}" style="color:red;"></p>
 
             <p class="text-center" th:text="${success}" style="color:green;"></p>
 
-            <label for="name">Name:</label>
-            <input type="text" th:field="*{name}" id="name" class="form-control mb-3" />
+            <label for="name">Booking:</label>
+            <input type="text" th:field="*{x}" id="x" class="form-control mb-3" />
 
-            <label for="email">Email:</label>
-            <input type="email" th:field="*{email}" id="email" class="form-control mb-3" />
+            <label for="email">Dates:</label>
+            <input type="email" th:field="*{x}" id="x" class="form-control mb-3" />
 
-            <label for="phonenumber">Phone:</label>
-            <input type="tel" th:field="*{phonenumber}" id="phonenumber" class="form-control mb-3" />
+            <label for="phonenumber">Room number:</label>
+            <input type="tel" th:field="*{x}" id="x" class="form-control mb-3" />
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Confirm changes</button>
             <button type="button" onclick="window.location.href='/home';" class="btn btn-primary">Home</button>
         </form>
     </div>
