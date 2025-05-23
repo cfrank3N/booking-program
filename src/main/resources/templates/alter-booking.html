@@ -10,7 +10,7 @@
 <h2 class="text-center">Alter booking</h2>
 <div class="container">
     <div class="form-group">
-        <form th:action="@{/booking/alter}" th:object="${x}" method="post">
+        <form th:action="@{/booking/alter/{id}(id=${booking.bookingId})}" th:object="${booking}" method="post">
             <!--            ändra till booking-->
 
             <p class="text-center" th:if="${error}" th:text="${error}" style="color:red;"></p>
@@ -18,14 +18,12 @@
 
             <p class="text-center" th:text="${success}" style="color:green;"></p>
 
-            <label for="name">Booking:</label>
-            <input type="text" th:field="*{x}" id="x" class="form-control mb-3" />
+            <label for="dateFrom">Booking:</label>
+            <input type="date" th:field="*{dateFrom}" class="form-control mb-3" />
 
-            <label for="email">Dates:</label>
-            <input type="email" th:field="*{x}" id="x" class="form-control mb-3" />
+            <label for="dateUntil">Dates:</label>
+            <input type="date" th:field="*{dateUntil}" id="x" class="form-control mb-3" />
 
-            <label for="phonenumber">Room number:</label>
-            <input type="tel" th:field="*{x}" id="x" class="form-control mb-3" />
 
             <button type="submit" class="btn btn-primary">Confirm changes</button>
             <button type="button" onclick="window.location.href='/home';" class="btn btn-primary">Home</button>

@@ -31,11 +31,13 @@ public class BookingService {
     private final BookingRepository bookingRepo;
     private final RoomRepository roomRepo;
     private final GuestRepository guestRepo;
+    private final BookingRepository bookingRepository;
 
-    public BookingService(BookingRepository bookingRepo, RoomRepository roomRepo, GuestRepository guestRepo) {
+    public BookingService(BookingRepository bookingRepo, RoomRepository roomRepo, GuestRepository guestRepo, BookingRepository bookingRepository) {
         this.bookingRepo = bookingRepo;
         this.roomRepo = roomRepo;
         this.guestRepo = guestRepo;
+        this.bookingRepository = bookingRepository;
     }
 
     public List<BookingDTO> fetchAllBookings() {
@@ -102,4 +104,9 @@ public class BookingService {
         return !overlapping.isEmpty();
     }
 
+    public BookingDTO fetchBookingById(Long id) {
+        return bookingRepo.findById(id)
+                .map(BookingMapper::bookingToBookingDTODetailed)
+                .orElseThrow(() -> new ResourceDoesntExistException("Booking with ID: " +id +"not found"));
+    }
 }
