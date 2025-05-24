@@ -10,8 +10,11 @@
             crossorigin="anonymous"/>
 </head>
 <body>
-<h2 class="text-center">Alter Guest</h2>
-<div class="container">
+<div class="container mt-4">
+    <h2>Alter Guest</h2>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
     <form th:action="@{/guest/alter/{id}(id=${guest.guestId})}" th:object="${guest}" method="post">
 
         <input type="hidden" th:field="*{guestId}"/>
@@ -38,7 +41,7 @@
             <a th:href="@{/guest/alter}" class="btn btn-secondary">Back</a>
             <a th:href="@{/home}" class="btn btn-success">Home</a>
 
-            <p th:if="${success}" class="text-success mt-2" th:text="${success}"/>
+
         </div>
     </form>
 </div>
