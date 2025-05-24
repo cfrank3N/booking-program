@@ -34,13 +34,11 @@ public class BookingService {
     private final BookingRepository bookingRepo;
     private final RoomRepository roomRepo;
     private final GuestRepository guestRepo;
-    private final BookingRepository bookingRepository;
 
-    public BookingService(BookingRepository bookingRepo, RoomRepository roomRepo, GuestRepository guestRepo, BookingRepository bookingRepository) {
+    public BookingService(BookingRepository bookingRepo, RoomRepository roomRepo, GuestRepository guestRepo) {
         this.bookingRepo = bookingRepo;
         this.roomRepo = roomRepo;
         this.guestRepo = guestRepo;
-        this.bookingRepository = bookingRepository;
     }
 
     public List<BookingDTO> fetchAllBookings() {

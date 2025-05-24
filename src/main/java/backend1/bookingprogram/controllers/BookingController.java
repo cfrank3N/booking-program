@@ -57,7 +57,7 @@ public class BookingController {
         return service.alterBooking(id, b);
     }
 
-    @DeleteMapping("booking/{id}")
+    @DeleteMapping("booking/delete/{id}")
     public ResponseEntity<String> cancelBooking(@PathVariable long id) {
         return service.deleteBooking(id);
     }
