@@ -12,8 +12,9 @@
     <div class="mb-5">
         <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-success">Handle Bookings</button>
-            <button type="button" class="btn btn-success">Handle Guests</button>
+            <a th:href="@{/guest/alter}" class="btn btn-success">Alter Guests</a>
             <button type="button" class="btn btn-success">Handle Rooms</button>
+
         </div>
     </div>
     <p th:text="${booking}"></p>

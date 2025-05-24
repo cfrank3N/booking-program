@@ -2,12 +2,12 @@ package backend1.bookingprogram.service;
 
 
 import backend1.bookingprogram.dtos.GuestDTO;
-
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
+import backend1.bookingprogram.mappers.GuestMapper;
+import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.models.Guest;
-
 import backend1.bookingprogram.repositories.GuestRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
@@ -15,19 +15,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 import static backend1.bookingprogram.mappers.GuestMapper.guestDTOToGuestDetailed;
 import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
 
 
-import java.time.LocalDate;
-
-
 @Service
 public class GuestService {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookingService.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(GuestService.class);
     private final GuestRepository repo;
 
     public GuestService(GuestRepository repo) {
@@ -37,7 +34,7 @@ public class GuestService {
     public List<GuestDTO> fetchAllGuests() {
         return repo.findAll()
                 .stream()
-                .map(g -> guestToGuestDTODetailed(g))
+                .map(GuestMapper::guestToGuestDTODetailed)
                 .toList();
     }
 
@@ -51,7 +48,7 @@ public class GuestService {
         return ResponseEntity.status(HttpStatus.CREATED).body(g.getName() + " registered!");
     }
 
-    public String deleteGuest(Long id) {
+    public void deleteGuest(Long id) {
         if (repo.findById(id).isEmpty()) {
             throw new ResourceDoesntExistException("Guest doesn't exist");
         }
@@ -61,7 +58,6 @@ public class GuestService {
         else {
             log.info("Guest with ID: {} was deleted.", id);
             repo.deleteById(id);
-            return " guest(s) deleted.";
         }
     }
 
@@ -70,22 +66,36 @@ public class GuestService {
                 .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
     }
 
+    public List<Booking> showActiveBookings(Long guestID) {
+        Guest guest = repo.findById(guestID).orElseThrow(() -> new ResourceDoesntExistException("Guest not found"));
+
+        return guest.getBookings().stream().filter(booking -> LocalDate.now().isBefore(booking.getDateUntil())).toList();
+    }
+
     @Transactional
     public ResponseEntity<String> alterGuest(Long id, GuestDTO g) {
-        if (repo.findByEmail(g.getEmail()).isPresent()) {
-            throw new ResourceAlreadyExistsException("Email is taken!");
-        }
-        repo.findById(id).ifPresent(guest -> {
-
-            guest.setName(g.getName());
-            guest.setEmail(g.getEmail());
-            guest.setPhonenumber(g.getPhonenumber());
-
+        repo.findByEmail(g.getEmail()).ifPresent(existing -> {
+            if (!existing.getId().equals(id)) {
+                throw new ResourceAlreadyExistsException("Email address is used by another guest");
+            }
         });
+
+        Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
+        log.info("Altering {}", guest );
+
+        guest.setName(g.getName());
+        guest.setEmail(g.getEmail());
+        guest.setPhonenumber(g.getPhonenumber());
+
+        log.info("Altered {}", guest);
 
         return ResponseEntity.ok("User updated");
     }
 
 
-
+    public GuestDTO fetchGuestById(Long id) {
+        return repo.findById(id)
+                .map(GuestMapper::guestToGuestDTODetailed)
+                .orElseThrow(() -> new ResourceDoesntExistException("No Guest " + id));
+    }
 }

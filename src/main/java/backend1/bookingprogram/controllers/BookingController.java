@@ -1,15 +1,18 @@
 package backend1.bookingprogram.controllers;
 
-import backend1.bookingprogram.dtos.*;
+import backend1.bookingprogram.dtos.ActiveBookingDTO;
+import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.service.BookingService;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+
+import static backend1.bookingprogram.mappers.BookingMapper.bookingDetailedToActiveBookingDTO;
 
 
 @Controller
@@ -23,14 +26,11 @@ public class BookingController {
     }
 
 
+    // fixa här
     @PostMapping("/rooms/select/guest/confirmation")
     public String createBooking(@ModelAttribute ActiveBookingDTO booking,
-                                                @RequestParam Long gId,
-                                                Model model) {
-        System.out.println(gId);
-        System.out.println(booking);
+                                @RequestParam Long gId) {
         booking.setGId(gId);
-        System.out.println(booking);
         service.createBooking(booking);
         return "success";
     }
@@ -46,13 +46,42 @@ public class BookingController {
         return service.fetchAllBookings();
     }
 
-    @PutMapping("/booking/{id}")
-    public ResponseEntity<String> changeBooking(@PathVariable long id, @RequestBody BookingDTO b) {
-        return service.alterBooking(id, b);
+    @DeleteMapping("booking/delete/{id}")
+    public String cancelBooking(@PathVariable long id, Model model) {
+        service.deleteBooking(id);
+        model.addAttribute("bookings", service.fetchAllBookings());
+        model.addAttribute("success", "Booking deleted successfully");
+        return "choose-booking-to-alter";
     }
 
-    @DeleteMapping("booking/{id}")
-    public ResponseEntity<String> cancelBooking(@PathVariable long id) {
-        return service.deleteBooking(id);
+    @GetMapping("booking/alter")
+    public String chooseBookingToAlter(Model model) {
+        model.addAttribute("bookings", service.fetchAllBookings());
+        return "choose-booking-to-alter";
     }
+
+    @GetMapping("/booking/alter/{id}")
+    public String showBookingForm(@PathVariable Long id, Model model) {
+        ActiveBookingDTO booking = bookingDetailedToActiveBookingDTO(service.fetchBookingById(id));
+        booking.setBookingId(id);
+        model.addAttribute("booking", booking);
+        //model.addAttribute("rooms", roomService.fetchAllRooms());
+        return "alter-booking";
+    }
+
+    @PostMapping("/booking/alter/submit")
+    public String submitAlterBooking(@ModelAttribute("booking") ActiveBookingDTO b,
+                                     RedirectAttributes ra,
+                                     Model model) {
+        try {
+            service.alterBooking(b);
+            ra.addFlashAttribute("success", "Booking altered");
+            return "redirect:/booking/alter";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("booking", b);
+            return "alter-booking";
+        }
+    }
+
 }

@@ -36,4 +36,14 @@ public class Room {
         this.roomSize = roomSize;
         this.bookings = bookings;
     }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomSize=" + roomSize +
+                ", roomName='" + roomName + '\'' +
+                ", roomNumber='" + roomNumber + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }
