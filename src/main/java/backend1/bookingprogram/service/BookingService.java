@@ -4,15 +4,12 @@ package backend1.bookingprogram.service;
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 
-import backend1.bookingprogram.dtos.GuestDTO;
-import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.mappers.BookingMapper;
 import backend1.bookingprogram.mappers.GuestMapper;
 import backend1.bookingprogram.mappers.RoomMapper;
 import backend1.bookingprogram.models.Booking;
-import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
@@ -45,12 +42,11 @@ public class BookingService {
         return bookingRepo.findAll().stream().map(BookingMapper::bookingToBookingDTODetailed).toList();
     }
 
-    public ResponseEntity<String> deleteBooking(Long id) {
+    public void deleteBooking(Long id) {
         if (bookingRepo.findById(id).isEmpty()) {
             throw new ResourceDoesntExistException("Can't find booking");
         }
         bookingRepo.deleteById(id);
-        return ResponseEntity.ok("Booking " + id + "cancelled");
     }
 
     public ResponseEntity<String> createBooking(ActiveBookingDTO b) {

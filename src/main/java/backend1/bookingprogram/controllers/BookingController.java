@@ -58,13 +58,15 @@ public class BookingController {
     }
 
     @DeleteMapping("booking/delete/{id}")
-    public ResponseEntity<String> cancelBooking(@PathVariable long id) {
-        return service.deleteBooking(id);
+    public String cancelBooking(@PathVariable long id, Model model) {
+        service.deleteBooking(id);
+        model.addAttribute("bookings", service.fetchAllBookings());
+        model.addAttribute("success", "Booking deleted successfully");
+        return "choose-booking-to-alter";
     }
 
     @GetMapping("booking/alter")
     public String chooseBookingToAlter(Model model) {
-        List<BookingDTO> bookings = service.fetchAllBookings();
         model.addAttribute("bookings", service.fetchAllBookings());
         return "choose-booking-to-alter";
     }
@@ -85,7 +87,7 @@ public class BookingController {
                                      Model model) {
         try {
             service.alterBooking(id, b);
-            ra.addFlashAttribute("successs", "Booking altered");
+            ra.addFlashAttribute("success", "Booking altered");
             return "redirect:/booking/alter";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
