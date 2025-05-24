@@ -43,4 +43,13 @@ public class BookingMapper {
                 .numberOfGuests(b.getNumberOfGuests())
                 .build();
     }
+    public static ActiveBookingDTO bookingDetailedToActiveBookingDTO(BookingDTO b) {
+        return ActiveBookingDTO.builder()
+                .dateFrom(b.getDateFrom())
+                .dateUntil(b.getDateUntil())
+                .numberOfGuests(b.getNumberOfGuests())
+                .rId(b.getRoom().getRoomId())
+                .gId(b.getGuest().getGuestId())
+                .build();
+    }
 }

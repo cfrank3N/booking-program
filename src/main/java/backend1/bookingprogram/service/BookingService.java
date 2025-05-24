@@ -7,8 +7,6 @@ import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.mappers.BookingMapper;
-import backend1.bookingprogram.mappers.GuestMapper;
-import backend1.bookingprogram.mappers.RoomMapper;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.repositories.BookingRepository;
 import backend1.bookingprogram.repositories.GuestRepository;
@@ -22,8 +20,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static backend1.bookingprogram.mappers.BookingMapper.activeBookingDTOToBookingDetailed;
 import static backend1.bookingprogram.mappers.BookingMapper.bookingDTOToBookingDetailed;
-import static backend1.bookingprogram.mappers.RoomMapper.roomDTOToRoomMinimal;
+import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
+import static backend1.bookingprogram.mappers.RoomMapper.roomToRoomDTODetailed;
 
 @Service
 public class BookingService {
@@ -51,9 +51,9 @@ public class BookingService {
 
     public ResponseEntity<String> createBooking(ActiveBookingDTO b) {
 
-        BookingDTO booking = BookingMapper.activeBookingDTOToBookingDetailed(b);
-        booking.setRoom(RoomMapper.roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
-        booking.setGuest(GuestMapper.guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
+        BookingDTO booking = activeBookingDTOToBookingDetailed(b);
+        booking.setRoom(roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
+        booking.setGuest(guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
 
         //todo:I think this check is unnecessary, its already been performed in RoomService.fetchAllAvailableRooms
         if (hasOverlappingDates(booking)) {
@@ -73,18 +73,22 @@ public class BookingService {
     }
 
     @Transactional
-    public ResponseEntity<String> alterBooking(Long id, BookingDTO b){
-        bookingRepo.findById(id).ifPresent(booking -> {
+    public void alterBooking(ActiveBookingDTO activeBooking){
+        BookingDTO b = activeBookingDTOToBookingDetailed(activeBooking);
+        b.setBookingId(activeBooking.getBookingId());
+        b.setRoom(roomToRoomDTODetailed(roomRepo.findById(activeBooking.getRId()).get()));
+        b.setGuest(guestToGuestDTODetailed(guestRepo.findById(activeBooking.getGId()).get()));
+        bookingRepo.findById(b.getBookingId()).ifPresent(booking -> {
             if (hasOverlappingDates(b)) {
                 throw new ResourceAlreadyExistsException("The room is not available on these dates");
             } else {
+                booking.setRoom(roomRepo.findById(activeBooking.getRId()).get());
+                booking.setGuest(guestRepo.findById(activeBooking.getGId()).get());
                 booking.setDateFrom(b.getDateFrom());
                 booking.setDateUntil(b.getDateUntil());
                 booking.setNumberOfGuests(b.getNumberOfGuests());
-                booking.setRoom(roomDTOToRoomMinimal(b.getRoom()));
             }
         });
-        return ResponseEntity.ok("Booking updated");
     }
 
     public boolean hasOverlappingDates(BookingDTO booking){
