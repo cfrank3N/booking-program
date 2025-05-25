@@ -15,7 +15,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String fetchHomePage(Model model) {
-        if (!model.containsAttribute("availableRooms")) {
+        if (!model.containsAttribute("booking")) {
             model.addAttribute("booking", new ActiveBookingDTO());
         }
         return HOMEPAGE.getViewName();
