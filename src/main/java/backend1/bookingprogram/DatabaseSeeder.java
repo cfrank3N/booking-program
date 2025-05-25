@@ -41,7 +41,7 @@ public class DatabaseSeeder {
             guestRepository.saveAll(List.of(guest1, guest2, guest3));
 
 
-            Booking booking1 = new Booking(LocalDate.parse("2025-05-13"), LocalDate.parse("2025-05-25"), 2, guest1, room1);
+            Booking booking1 = new Booking(LocalDate.now(), LocalDate.now().plusDays(5), 2, guest1, room1);
             bookingRepository.saveAll(List.of(booking1));
             // osv.
         }
