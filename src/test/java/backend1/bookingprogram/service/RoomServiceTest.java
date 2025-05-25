@@ -28,11 +28,16 @@ class RoomServiceTest {
     @Test
     void getMinRoomSize() {
         //TODO
+        int result = RoomService.getMinRoomSize(3);
+        int result2 = RoomService.getMinRoomSize(1);
+
+        assertEquals(30, result);
+        assertNotEquals(40, result2);
     }
 
     @Test
     void fetchAllAvailableRooms() {
-        //TODO
+
         List<RoomDTO> result = roomService.fetchAllAvailableRooms(start, end, 1);
         List<RoomDTO> result2 = roomService.fetchAllAvailableRooms(start2, end2, 1);
         List<RoomDTO> result3 = roomService.fetchAllAvailableRooms(start2, end2, 3);
