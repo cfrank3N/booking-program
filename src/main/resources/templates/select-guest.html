@@ -9,14 +9,18 @@
 <body>
 <div class="container mt-5 vh-100 d-flex flex-column justify-content-center align-items-center">
 
+    <!--    prints bookingDTO status on page -->
+<!--    <p th:text="${booking}"></p>-->
+
     <div class="mb-5">
         <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-success">Handle Bookings</button>
-            <button type="button" class="btn btn-success">Handle Guests</button>
+            <a th:href="@{/guest/alter}" class="btn btn-success">Alter Guests</a>
             <button type="button" class="btn btn-success">Handle Rooms</button>
+
         </div>
     </div>
-    <p th:text="${booking}"></p>
+
     <div class="col-md-7 col-lg-5 my-5">
         <h2 class="mb-4">Guest List</h2>
 

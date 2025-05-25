@@ -2,14 +2,12 @@ package backend1.bookingprogram.service;
 
 import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.exceptions.FaultyDateException;
+import backend1.bookingprogram.mappers.RoomMapper;
 import backend1.bookingprogram.repositories.RoomRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static backend1.bookingprogram.mappers.RoomMapper.roomToRoomDTODetailed;
-
 
 @Service
 public class RoomService {
@@ -46,13 +44,13 @@ public class RoomService {
                         .noneMatch(booking -> booking.getDateFrom().isBefore(endDate) &&
                                 booking.getDateUntil().isAfter(startDate)))
                 .filter(room -> room.getRoomSize()>=minRoomSize)
-                .map(room -> roomToRoomDTODetailed(room)).toList();
+                .map(RoomMapper::roomToRoomDTODetailed).toList();
     }
 
     public List<RoomDTO> fetchAllRooms() {
         return roomRepository.findAll()
                 .stream()
-                .map(room -> roomToRoomDTODetailed(room))
+                .map(RoomMapper::roomToRoomDTODetailed)
                 .toList();
     }
 }

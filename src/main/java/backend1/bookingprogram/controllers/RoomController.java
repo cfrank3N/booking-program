@@ -1,5 +1,6 @@
 package backend1.bookingprogram.controllers;
 
+import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.service.RoomService;
@@ -15,7 +16,7 @@ import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
 @Controller
 public class RoomController {
 
-    private RoomService roomService;
+    private final RoomService roomService;
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(RoomController.class);
 
     public RoomController(RoomService roomService) {
@@ -27,8 +28,25 @@ public class RoomController {
                                 Model model) {
         List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(booking.getDateFrom(),
                 booking.getDateUntil(), booking.getNumberOfGuests());
+
+        log.info("Booking status [1/3]: date's selected: {}", booking);
+
         model.addAttribute("rooms", rooms);
         model.addAttribute("booking", booking);
         return SELECT_ROOM.getViewName();
+    }
+
+    @PostMapping("/booking/alter/{id}/rooms")
+    public String fetchAvailableRoomsForAlterBooking(@PathVariable Long id, @ModelAttribute ActiveBookingDTO booking,
+                                Model model) {
+
+        log.info("Altering booking: {}", booking);
+
+        booking.setBookingId(id);
+        List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(booking.getDateFrom(),
+                booking.getDateUntil(), booking.getNumberOfGuests());
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("booking", booking);
+        return "alter-booking";
     }
 }
