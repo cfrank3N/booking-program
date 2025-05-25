@@ -30,6 +30,11 @@ public class BookingController {
     @PostMapping("/rooms/select/guest/confirmation")
     public String createBooking(@ModelAttribute ActiveBookingDTO booking,
                                 @RequestParam Long gId) {
+
+        log.info("Booking status [3/3]: booking created: {}", booking);
+
+//        log.info("Booking status: {}", booking);
+
         booking.setGId(gId);
         service.createBooking(booking);
         return "success";
@@ -48,6 +53,9 @@ public class BookingController {
 
     @DeleteMapping("booking/delete/{id}")
     public String cancelBooking(@PathVariable long id, Model model) {
+
+        log.info("Booking ID: " +id +" deleted");
+
         service.deleteBooking(id);
         model.addAttribute("bookings", service.fetchAllBookings());
         model.addAttribute("success", "Booking deleted successfully");
@@ -56,6 +64,7 @@ public class BookingController {
 
     @GetMapping("booking/alter")
     public String chooseBookingToAlter(Model model) {
+
         model.addAttribute("bookings", service.fetchAllBookings());
         return "choose-booking-to-alter";
     }
@@ -74,10 +83,16 @@ public class BookingController {
                                      RedirectAttributes ra,
                                      Model model) {
         try {
+
+            log.info("Booking successfully altered: {}", b);
+
             service.alterBooking(b);
             ra.addFlashAttribute("success", "Booking altered");
             return "redirect:/booking/alter";
         } catch (Exception e) {
+
+            log.warn("Booking unsuccessfully altered: {}", b);
+
             model.addAttribute("error", e.getMessage());
             model.addAttribute("booking", b);
             return "alter-booking";

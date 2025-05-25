@@ -42,10 +42,12 @@ public class GuestController {
     public String fetchAllGuests(@ModelAttribute ActiveBookingDTO booking,
                                  @RequestParam Long rId,
                                  Model model) {
-
         booking.setRId(rId);
-        System.out.println("This is when we fetch the room");
-        System.out.println(booking);
+
+        log.info("Booking status [2/3]: room selected: {}", booking);
+
+//        System.out.println("This is when we fetch the room");
+//        System.out.println(booking);
 
         List<GuestDTO> guests = service.fetchAllGuests();
         model.addAttribute("booking", booking);
