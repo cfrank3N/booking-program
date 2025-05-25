@@ -37,8 +37,8 @@ class RoomControllerTest {
     @Test
     void fetchAllAvailableRooms() throws Exception {
 
-        LocalDate startDate = LocalDate.of(2025, 6, 1);
-        LocalDate endDate = LocalDate.of(2025, 6, 5);
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(2);
         int numberOfGuests = 2;
 
         mvc.perform(post("/rooms")
@@ -52,7 +52,21 @@ class RoomControllerTest {
     }
 
     @Test
-    void fetchAvailableRoomsForAlterBooking() {
+    void fetchAvailableRoomsForAlterBooking() throws Exception {
         //TODO
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(2);
+        int numberOfGuests = 2;
+
+        //Make sure you have an initialized mockdb with data and that it has a booking with id 1.
+        //If it doesn't you can just look up the id and exchange it below in the uri in the post() method.
+        mvc.perform(post("/booking/alter/1/rooms")
+                        .param("dateFrom", startDate.toString())
+                        .param("dateUntil", endDate.toString())
+                        .param("numberOfGuests", String.valueOf(numberOfGuests)))
+                .andExpect(status().isOk())
+                .andExpect(view().name("alter-booking"))
+                .andExpect(model().attributeExists("rooms"))
+                .andExpect(model().attributeExists("booking"));
     }
 }
