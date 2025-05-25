@@ -29,15 +29,15 @@ public class BookingController {
     // fixa här
     @PostMapping("/rooms/select/guest/confirmation")
     public String createBooking(@ModelAttribute ActiveBookingDTO booking,
-                                @RequestParam Long gId) {
-
-        log.info("Booking status [3/3]: booking created: {}", booking);
-
-//        log.info("Booking status: {}", booking);
+                                @RequestParam Long gId, Model model) {
 
         booking.setGId(gId);
+        log.info("Booking status [3/3]: booking created: {}", booking);
+
         service.createBooking(booking);
-        return "success";
+
+        model.addAttribute("booking", booking);
+        return "booking-confirmation";
     }
 
     @GetMapping("/booking/{roomId}/bookings")
