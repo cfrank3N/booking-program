@@ -1,5 +1,6 @@
 package backend1.bookingprogram.handlers;
 
+import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.GuestDTO;
 import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.exceptions.CantDeleteException;
@@ -54,7 +55,7 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(FaultyDateException.class)
     public ModelAndView handleFaultyDate(RedirectAttributes redirectAttributes, FaultyDateException e) {
         redirectAttributes.addFlashAttribute("error", e.getMessage());
-        redirectAttributes.addFlashAttribute("availableRooms", new RoomSearchDTO());
+        redirectAttributes.addFlashAttribute("booking", new ActiveBookingDTO());
         RedirectView redirectView = new RedirectView(HOMEPAGE.getUri(), true); // `true` for context-relative
         return new ModelAndView(redirectView);
     }
