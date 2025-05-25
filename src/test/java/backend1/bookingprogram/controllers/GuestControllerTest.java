@@ -63,4 +63,19 @@ class GuestControllerTest {
                 .andExpect(model().attributeExists("guest"))
                 .andExpect(model().attributeExists("error"));
     }
+
+    @Test
+    void fetchAllGuests() throws Exception {
+
+        mvc.perform(post("/rooms/select/guest")
+                    .param("rId", "1")
+                    .param("dateFrom", LocalDate.now().plusDays(20).toString())
+                    .param("dateUntil", LocalDate.now().plusDays(30).toString())
+                    .param("numberOfGuests", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("select-guest"))
+                .andExpect(model().attributeExists("booking"))
+                .andExpect(model().attributeExists("guests"));
+
+    }
 }
