@@ -25,8 +25,6 @@ public class BookingController {
         this.service = service;
     }
 
-
-    // fixa här
     @PostMapping("/rooms/select/guest/confirmation")
     public String createBooking(@ModelAttribute ActiveBookingDTO booking,
                                 @RequestParam Long gId, Model model) {
@@ -34,7 +32,8 @@ public class BookingController {
         booking.setGId(gId);
         log.info("Booking status [3/3]: booking created: {}", booking);
 
-        service.createBooking(booking);
+        Booking savedBooking = service.createBooking(booking);
+        booking.setBookingId(savedBooking.getId());
 
         model.addAttribute("booking", booking);
         return "booking-confirmation";
@@ -54,11 +53,13 @@ public class BookingController {
     @DeleteMapping("booking/delete/{id}")
     public String cancelBooking(@PathVariable long id, Model model) {
 
-        log.info("Booking ID: " +id +" deleted");
 
         service.deleteBooking(id);
         model.addAttribute("bookings", service.fetchAllBookings());
         model.addAttribute("success", "Booking deleted successfully");
+
+        log.info("Booking deleted, id: {}", id);
+
         return "choose-booking-to-alter";
     }
 
@@ -98,5 +99,4 @@ public class BookingController {
             return "alter-booking";
         }
     }
-
 }

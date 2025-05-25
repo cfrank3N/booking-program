@@ -49,7 +49,7 @@ public class BookingService {
         bookingRepo.deleteById(id);
     }
 
-    public ResponseEntity<String> createBooking(ActiveBookingDTO b) {
+    public Booking createBooking(ActiveBookingDTO b) {
 
         BookingDTO booking = activeBookingDTOToBookingDetailed(b);
         booking.setRoom(roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
@@ -57,15 +57,18 @@ public class BookingService {
 
         //todo:I think this check is unnecessary, its already been performed in RoomService.fetchAllAvailableRooms
         if (hasOverlappingDates(booking)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Room is already booked during this period.");
+            throw new ResourceAlreadyExistsException("Room is already booking during this time period.");
         }
 
         Booking bookToSave = bookingDTOToBookingDetailed(booking);
-        bookingRepo.save(bookToSave);
+        Booking savedBooking = bookingRepo.save(bookToSave);
 
-        log.info("Booking process finished: Booking created: {}", bookToSave);
+//        bookingRepo.save(bookToSave);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
+        log.info("Booking process finished: Booking created: {}", savedBooking);
+
+        return savedBooking;
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
     }
 
     public List<Booking> getBookingsForRoom(Long roomId) {
