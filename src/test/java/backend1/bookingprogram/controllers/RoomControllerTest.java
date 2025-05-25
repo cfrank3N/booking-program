@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 
 import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +36,8 @@ class RoomControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(SELECT_ROOM.getViewName()))
                 .andExpect(model().attributeExists("rooms"))
-                .andExpect(model().attributeExists("booking"));
+                .andExpect(model().attributeExists("booking"))
+                .andExpect(model().attribute("rooms", hasSize(2)));
     }
 
     @Test
