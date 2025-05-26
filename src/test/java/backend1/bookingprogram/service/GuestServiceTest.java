@@ -113,15 +113,17 @@ class GuestServiceTest {
     @Transactional
     void alterGuest() {
 
-        Guest guestBefore = GuestMapper.guestDTOToGuestDetailed(g1);
-        guestBefore.setBookings(new ArrayList<>());
-
-        GuestDTO guestAfter = g3;
-
-        repo.save(guestBefore);
-
         assertThrows(ResourceDoesntExistException.class, () -> service.alterGuest(25L, g3));
 
+        Guest guest = GuestMapper.guestDTOToGuestDetailed(g1);
+        guest.setBookings(new ArrayList<>());
+
+        repo.save(guest);
+        long id = repo.findByEmail(guest.getEmail()).get().getId();
+
+        repo.findByEmail(guest.getEmail()).ifPresent(g -> service.alterGuest(g.getId(), g3));
+
+        assertEquals(g3.getName(), repo.findById(id).get().getName());
 
     }
 
