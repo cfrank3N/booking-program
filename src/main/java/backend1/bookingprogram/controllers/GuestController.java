@@ -5,12 +5,15 @@ package backend1.bookingprogram.controllers;
 import backend1.bookingprogram.dtos.*;
 
 import backend1.bookingprogram.exceptions.CantDeleteException;
+import backend1.bookingprogram.exceptions.EmailValidationException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -70,8 +73,15 @@ public class GuestController {
     public String alterGuestSubmit(@PathVariable("id") Long id,
                                    @ModelAttribute("guest")
                                    @Valid GuestDTO guest,
+                                   BindingResult bindingResult,
                                    Model model,
                                    RedirectAttributes ra) {
+        if (bindingResult.hasErrors()) {
+            if (!bindingResult.getFieldErrors("email").isEmpty()) {
+                throw new EmailValidationException(guest, "Faulty email adress");
+            }
+
+        }
         try {
             service.alterGuest(id, guest);
             ra.addFlashAttribute("success", "Guest updated");
