@@ -5,6 +5,7 @@ package backend1.bookingprogram.controllers;
 import backend1.bookingprogram.dtos.*;
 
 import backend1.bookingprogram.enums.RoutingInfo;
+import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
@@ -112,10 +113,16 @@ public class GuestController {
     @Transactional
     @DeleteMapping("/guest/delete/{id}")
     public String deleteGuest(@PathVariable Long id, Model model) {
-        service.deleteGuest(id);
-        model.addAttribute("guests", service.fetchAllGuests());
-        model.addAttribute("success", "Guest deleted successfully");
-        return "choose-guest-to-alter";
+        try {
+            service.deleteGuest(id);
+            model.addAttribute("guests", service.fetchAllGuests());
+            model.addAttribute("success", "Guest deleted successfully");
+            return "choose-guest-to-alter";
+        } catch (CantDeleteException e) {
+            model.addAttribute("guests", service.fetchAllGuests());
+            model.addAttribute("error", e.getMessage());
+            return "choose-guest-to-alter";
+        }
     }
 
     @GetMapping("guest/bookings/{id}")
