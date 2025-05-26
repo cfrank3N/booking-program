@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
-import static backend1.bookingprogram.enums.RoutingInfo.SHOW_ROOMS;
+import static backend1.bookingprogram.enums.RoutingInfo.*;
 
 @Controller
 public class RoomController {
@@ -54,6 +53,6 @@ public class RoomController {
                 booking.getDateUntil(), booking.getNumberOfGuests());
         model.addAttribute("rooms", rooms);
         model.addAttribute("booking", booking);
-        return "alter-booking";
+        return ALTER_BOOKING.getViewName();
     }
 }

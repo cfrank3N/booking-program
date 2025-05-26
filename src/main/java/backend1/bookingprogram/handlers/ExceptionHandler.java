@@ -2,7 +2,6 @@ package backend1.bookingprogram.handlers;
 
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.GuestDTO;
-import backend1.bookingprogram.dtos.RoomSearchDTO;
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.FaultyDateException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;

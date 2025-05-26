@@ -1,7 +1,6 @@
 package backend1.bookingprogram.controllers;
 
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
-import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.service.BookingService;
 import org.slf4j.LoggerFactory;
@@ -10,8 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
+import static backend1.bookingprogram.enums.RoutingInfo.*;
 import static backend1.bookingprogram.mappers.BookingMapper.bookingDetailedToActiveBookingDTO;
 
 
@@ -36,18 +34,7 @@ public class BookingController {
         booking.setBookingId(savedBooking.getId());
 
         model.addAttribute("booking", booking);
-        return "booking-confirmation";
-    }
-
-    @GetMapping("/booking/{roomId}/bookings")
-    public List<Booking> getBookingsForRoom(@PathVariable Long roomId) {
-        return service.getBookingsForRoom(roomId);
-
-    }
-
-    @GetMapping("/bookings")
-    public List<BookingDTO> getAllBookings() {
-        return service.fetchAllBookings();
+        return BOOKING_CONFIRMATION.getViewName();
     }
 
     @DeleteMapping("booking/delete/{id}")
@@ -60,14 +47,14 @@ public class BookingController {
 
         log.info("Booking deleted, id: {}", id);
 
-        return "choose-booking-to-alter";
+        return CHOOSE_BOOKING_TO_ALTER.getViewName();
     }
 
     @GetMapping("booking/alter")
     public String chooseBookingToAlter(Model model) {
 
         model.addAttribute("bookings", service.fetchAllBookings());
-        return "choose-booking-to-alter";
+        return CHOOSE_BOOKING_TO_ALTER.getViewName();
     }
 
     @GetMapping("/booking/alter/{id}")
@@ -76,7 +63,7 @@ public class BookingController {
         booking.setBookingId(id);
         model.addAttribute("booking", booking);
         //model.addAttribute("rooms", roomService.fetchAllRooms());
-        return "alter-booking";
+        return ALTER_BOOKING.getViewName();
     }
 
     @PostMapping("/booking/alter/submit")
@@ -96,7 +83,7 @@ public class BookingController {
 
             model.addAttribute("error", e.getMessage());
             model.addAttribute("booking", b);
-            return "alter-booking";
+            return ALTER_BOOKING.getViewName();
         }
     }
 }

@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static backend1.bookingprogram.mappers.GuestMapper.guestDTOToGuestDetailed;
-import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
 
 
 @Service

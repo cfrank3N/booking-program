@@ -13,8 +13,6 @@ import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,7 +53,6 @@ public class BookingService {
         booking.setRoom(roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
         booking.setGuest(guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
 
-        //todo:I think this check is unnecessary, its already been performed in RoomService.fetchAllAvailableRooms
         if (hasOverlappingDates(booking)) {
             throw new ResourceAlreadyExistsException("Room is already booking during this time period.");
         }
@@ -68,11 +65,6 @@ public class BookingService {
         log.info("Booking process finished: Booking created: {}", savedBooking);
 
         return savedBooking;
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
-    }
-
-    public List<Booking> getBookingsForRoom(Long roomId) {
-        return bookingRepo.findAll().stream().filter(b -> b.getRoom().getId().equals(roomId)).toList();
     }
 
     @Transactional
