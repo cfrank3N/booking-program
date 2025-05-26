@@ -50,17 +50,14 @@ public class BookingService {
     public Booking createBooking(ActiveBookingDTO b) {
 
         BookingDTO booking = activeBookingDTOToBookingDetailed(b);
-        booking.setRoom(roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
-        booking.setGuest(guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
-
+        roomRepo.findById(b.getRId()).ifPresent(r -> booking.setRoom(roomToRoomDTODetailed(r)));
+        guestRepo.findById(b.getRId()).ifPresent(g -> booking.setGuest(guestToGuestDTODetailed(g)));
         if (hasOverlappingDates(booking)) {
-            throw new ResourceAlreadyExistsException("Room is already booking during this time period.");
+            throw new ResourceAlreadyExistsException("Room is already booked during this time period.");
         }
 
         Booking bookToSave = bookingDTOToBookingDetailed(booking);
         Booking savedBooking = bookingRepo.save(bookToSave);
-
-//        bookingRepo.save(bookToSave);
 
         log.info("Booking process finished: Booking created: {}", savedBooking);
 
@@ -71,14 +68,18 @@ public class BookingService {
     public void alterBooking(ActiveBookingDTO activeBooking){
         BookingDTO b = activeBookingDTOToBookingDetailed(activeBooking);
         b.setBookingId(activeBooking.getBookingId());
-        b.setRoom(roomToRoomDTODetailed(roomRepo.findById(activeBooking.getRId()).get()));
-        b.setGuest(guestToGuestDTODetailed(guestRepo.findById(activeBooking.getGId()).get()));
+
+        roomRepo.findById(activeBooking.getRId()).ifPresent(r -> b.setRoom(roomToRoomDTODetailed(r)));
+        guestRepo.findById(activeBooking.getRId()).ifPresent(g -> b.setGuest(guestToGuestDTODetailed(g)));
+
         bookingRepo.findById(b.getBookingId()).ifPresent(booking -> {
             if (hasOverlappingDates(b)) {
                 throw new ResourceAlreadyExistsException("The room is not available on these dates");
             } else {
-                booking.setRoom(roomRepo.findById(activeBooking.getRId()).get());
-                booking.setGuest(guestRepo.findById(activeBooking.getGId()).get());
+
+                guestRepo.findById(activeBooking.getGId()).ifPresent(booking::setGuest);
+                roomRepo.findById(activeBooking.getRId()).ifPresent(booking::setRoom);
+
                 booking.setDateFrom(b.getDateFrom());
                 booking.setDateUntil(b.getDateUntil());
                 booking.setNumberOfGuests(b.getNumberOfGuests());
