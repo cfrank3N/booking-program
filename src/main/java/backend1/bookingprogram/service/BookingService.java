@@ -13,8 +13,6 @@ import backend1.bookingprogram.repositories.GuestRepository;
 import backend1.bookingprogram.repositories.RoomRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,41 +50,36 @@ public class BookingService {
     public Booking createBooking(ActiveBookingDTO b) {
 
         BookingDTO booking = activeBookingDTOToBookingDetailed(b);
-        booking.setRoom(roomToRoomDTODetailed(roomRepo.findById(b.getRId()).get()));
-        booking.setGuest(guestToGuestDTODetailed(guestRepo.findById(b.getGId()).get()));
-
-        //todo:I think this check is unnecessary, its already been performed in RoomService.fetchAllAvailableRooms
+        roomRepo.findById(b.getRId()).ifPresent(r -> booking.setRoom(roomToRoomDTODetailed(r)));
+        guestRepo.findById(b.getRId()).ifPresent(g -> booking.setGuest(guestToGuestDTODetailed(g)));
         if (hasOverlappingDates(booking)) {
-            throw new ResourceAlreadyExistsException("Room is already booking during this time period.");
+            throw new ResourceAlreadyExistsException("Room is already booked during this time period.");
         }
 
         Booking bookToSave = bookingDTOToBookingDetailed(booking);
         Booking savedBooking = bookingRepo.save(bookToSave);
 
-//        bookingRepo.save(bookToSave);
-
         log.info("Booking process finished: Booking created: {}", savedBooking);
 
         return savedBooking;
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Booking created for guest " + booking.getGuest().getName());
-    }
-
-    public List<Booking> getBookingsForRoom(Long roomId) {
-        return bookingRepo.findAll().stream().filter(b -> b.getRoom().getId().equals(roomId)).toList();
     }
 
     @Transactional
     public void alterBooking(ActiveBookingDTO activeBooking){
         BookingDTO b = activeBookingDTOToBookingDetailed(activeBooking);
         b.setBookingId(activeBooking.getBookingId());
-        b.setRoom(roomToRoomDTODetailed(roomRepo.findById(activeBooking.getRId()).get()));
-        b.setGuest(guestToGuestDTODetailed(guestRepo.findById(activeBooking.getGId()).get()));
+
+        roomRepo.findById(activeBooking.getRId()).ifPresent(r -> b.setRoom(roomToRoomDTODetailed(r)));
+        guestRepo.findById(activeBooking.getRId()).ifPresent(g -> b.setGuest(guestToGuestDTODetailed(g)));
+
         bookingRepo.findById(b.getBookingId()).ifPresent(booking -> {
             if (hasOverlappingDates(b)) {
                 throw new ResourceAlreadyExistsException("The room is not available on these dates");
             } else {
-                booking.setRoom(roomRepo.findById(activeBooking.getRId()).get());
-                booking.setGuest(guestRepo.findById(activeBooking.getGId()).get());
+
+                guestRepo.findById(activeBooking.getGId()).ifPresent(booking::setGuest);
+                roomRepo.findById(activeBooking.getRId()).ifPresent(booking::setRoom);
+
                 booking.setDateFrom(b.getDateFrom());
                 booking.setDateUntil(b.getDateUntil());
                 booking.setNumberOfGuests(b.getNumberOfGuests());

@@ -4,7 +4,6 @@ package backend1.bookingprogram.controllers;
 
 import backend1.bookingprogram.dtos.*;
 
-import backend1.bookingprogram.enums.RoutingInfo;
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.service.GuestService;
@@ -15,12 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-import static backend1.bookingprogram.enums.RoutingInfo.REGISTER_GUEST;
+import static backend1.bookingprogram.enums.RoutingInfo.*;
 
 @Controller
 public class GuestController {
@@ -34,7 +32,7 @@ public class GuestController {
     }
 
     @GetMapping("/guest/register")
-    public String viewHomepage(Model model) {
+    public String registerGuest(Model model) {
         model.addAttribute("guest", new GuestDTO());
         return REGISTER_GUEST.getViewName();
     }
@@ -47,13 +45,10 @@ public class GuestController {
 
         log.info("Booking status [2/3]: room selected: {}", booking);
 
-//        System.out.println("This is when we fetch the room");
-//        System.out.println(booking);
-
         List<GuestDTO> guests = service.fetchAllGuests();
         model.addAttribute("booking", booking);
         model.addAttribute("guests", guests);
-        return "select-guest";
+        return SELECT_GUEST.getViewName();
     }
 
     @PostMapping("/guest/register")
@@ -64,27 +59,11 @@ public class GuestController {
         return REGISTER_GUEST.getViewName();
     }
 
-    @PostMapping("/guest")
-    public ResponseEntity<String> createGuest(@Valid @RequestBody GuestDTO g) {
-        return service.createGuest(g);
-
-    }
-
-    @PutMapping("/guest/{id}")
-    public ResponseEntity<String> changeGuest(@PathVariable long id, @RequestBody GuestDTO g) {
-        return service.alterGuest(id, g);
-    }
-
-    @GetMapping("/guest")
-    public List<GuestDTO> getGuests() {
-        return service.fetchAllGuests();
-    }
-
     @GetMapping("/guest/alter/{id}")
     public String showAlterForm(@PathVariable("id") Long id, Model model) {
         GuestDTO dto = service.fetchGuestById(id);
         model.addAttribute("guest", dto);
-        return "alter-guest";
+        return ALTER_GUEST.getViewName();
     }
 
     @PostMapping("/guest/alter/{id}")
@@ -100,7 +79,7 @@ public class GuestController {
         } catch (ResourceAlreadyExistsException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("guest", guest);
-            return "alter-guest";
+            return ALTER_GUEST.getViewName();
         }
     }
 
@@ -117,11 +96,11 @@ public class GuestController {
             service.deleteGuest(id);
             model.addAttribute("guests", service.fetchAllGuests());
             model.addAttribute("success", "Guest deleted successfully");
-            return "choose-guest-to-alter";
+            return CHOOSE_GUEST_TO_ALTER.getViewName();
         } catch (CantDeleteException e) {
             model.addAttribute("guests", service.fetchAllGuests());
             model.addAttribute("error", e.getMessage());
-            return "choose-guest-to-alter";
+            return CHOOSE_GUEST_TO_ALTER.getViewName();
         }
     }
 
@@ -129,6 +108,6 @@ public class GuestController {
     public String showActiveBookingsOfGuest(@PathVariable Long id, Model model) {
         model.addAttribute("bookings", service.showActiveBookings(id));
         model.addAttribute("guest", service.fetchGuestById(id));
-        return "active-bookings";
+        return ACTIVE_BOOKINGS.getViewName();
     }
 }

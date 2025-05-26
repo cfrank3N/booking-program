@@ -35,6 +35,9 @@ public class RoomService {
         if (startDate.isBefore(LocalDate.now())) {
             throw new FaultyDateException("From date can't be in the past!");
         }
+        if (endDate.isBefore(startDate)) {
+            throw new FaultyDateException("'To' date can't be before 'From' date");
+        }
         int minRoomSize = getMinRoomSize(numberOfGuests);
 
         return  roomRepository.findAll()
