@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
+import static backend1.bookingprogram.enums.RoutingInfo.SHOW_ROOMS;
 
 @Controller
 public class RoomController {
@@ -34,6 +35,12 @@ public class RoomController {
         model.addAttribute("rooms", rooms);
         model.addAttribute("booking", booking);
         return SELECT_ROOM.getViewName();
+    }
+
+    @GetMapping("/rooms/all")
+    public String fetchAllRooms(Model model){
+        model.addAttribute("rooms", roomService.fetchAllRooms());
+        return SHOW_ROOMS.getViewName();
     }
 
     @PostMapping("/booking/alter/{id}/rooms")

@@ -54,7 +54,7 @@ public class GuestService {
         }
 
         if (guestHasActiveBookings(id))
-            throw new CantDeleteException("Guest has active bookings!");
+            throw new CantDeleteException("Guest could not be deleted due to active bookings.");
         else {
             log.info("Guest with ID: {} was deleted.", id);
             repo.deleteById(id);

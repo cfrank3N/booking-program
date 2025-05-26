@@ -30,7 +30,7 @@ public class RoomService {
     public List<RoomDTO> fetchAllAvailableRooms(LocalDate startDate, LocalDate endDate, int numberOfGuests) {
 
         if (startDate == null || endDate == null) {
-            throw new FaultyDateException("Both dates must be filled out!");
+            throw new FaultyDateException("Must select both dates!");
         }
         if (startDate.isBefore(LocalDate.now())) {
             throw new FaultyDateException("From date can't be in the past!");

@@ -15,6 +15,7 @@
 
     <p th:text="'Found ' + ${#lists.size(guests)} + ' guests.'"></p>
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
 
     <table class="table table-bordered table-hover">

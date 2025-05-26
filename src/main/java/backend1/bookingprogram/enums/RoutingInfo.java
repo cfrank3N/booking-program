@@ -5,7 +5,8 @@ public enum RoutingInfo {
     REGISTER_GUEST("/guest/register", "register-guest"),
     HOMEPAGE("/home", "index"),
     SELECT_ROOM("/rooms", "available-rooms"),
-    ALTER_GUEST("/guest/alter/{id}", "alter-guest");
+    ALTER_GUEST("/guest/alter/{id}", "alter-guest"),
+    SHOW_ROOMS("/rooms/all", "show-rooms");
 
     private final String uri;
     private final String viewName;
