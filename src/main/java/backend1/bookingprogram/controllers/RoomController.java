@@ -1,7 +1,6 @@
 package backend1.bookingprogram.controllers;
 
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
-import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.dtos.RoomDTO;
 import backend1.bookingprogram.service.RoomService;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,7 @@ public class RoomController {
     }
 
     @PostMapping("/rooms")
-    public String fetchAllAvailableRooms(@ModelAttribute BookingDTO booking,
+    public String fetchAllAvailableRooms(@ModelAttribute ActiveBookingDTO booking,
                                 Model model) {
         List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(booking.getDateFrom(),
                 booking.getDateUntil(), booking.getNumberOfGuests());

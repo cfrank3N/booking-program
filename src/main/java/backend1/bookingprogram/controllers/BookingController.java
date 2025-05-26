@@ -1,7 +1,7 @@
 package backend1.bookingprogram.controllers;
 
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
-import backend1.bookingprogram.models.Booking;
+import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.service.BookingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -30,8 +30,8 @@ public class BookingController {
         booking.setGId(gId);
         log.info("Booking status [3/3]: booking created: {}", booking);
 
-        Booking savedBooking = service.createBooking(booking);
-        booking.setBookingId(savedBooking.getId());
+        BookingDTO savedBooking = service.createBooking(booking);
+        booking.setBookingId(savedBooking.getBookingId());
 
         model.addAttribute("booking", booking);
         return BOOKING_CONFIRMATION.getViewName();

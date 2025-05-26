@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-import static backend1.bookingprogram.mappers.BookingMapper.activeBookingDTOToBookingDetailed;
-import static backend1.bookingprogram.mappers.BookingMapper.bookingDTOToBookingDetailed;
-import static backend1.bookingprogram.mappers.GuestMapper.guestToGuestDTODetailed;
-import static backend1.bookingprogram.mappers.RoomMapper.roomToRoomDTODetailed;
+import static backend1.bookingprogram.mappers.BookingMapper.*;
 
 @Service
 public class BookingService {
@@ -47,39 +44,37 @@ public class BookingService {
         bookingRepo.deleteById(id);
     }
 
-    public Booking createBooking(ActiveBookingDTO b) {
+    public BookingDTO createBooking(ActiveBookingDTO b) {
 
-        BookingDTO booking = activeBookingDTOToBookingDetailed(b);
-        roomRepo.findById(b.getRId()).ifPresent(r -> booking.setRoom(roomToRoomDTODetailed(r)));
-        guestRepo.findById(b.getRId()).ifPresent(g -> booking.setGuest(guestToGuestDTODetailed(g)));
+        Booking booking = activeBookingDTOToBookingDetailed(b);
+        roomRepo.findById(b.getRId()).ifPresent(booking::setRoom);
+        guestRepo.findById(b.getGId()).ifPresent(booking::setGuest);
         if (hasOverlappingDates(booking)) {
             throw new ResourceAlreadyExistsException("Room is already booked during this time period.");
         }
 
-        Booking bookToSave = bookingDTOToBookingDetailed(booking);
-        Booking savedBooking = bookingRepo.save(bookToSave);
+        bookingRepo.save(booking);
 
-        log.info("Booking process finished: Booking created: {}", savedBooking);
+        log.info("Booking process finished: Booking created: {}", booking);
 
-        return savedBooking;
+        return bookingToBookingDTODetailed(booking);
     }
 
     @Transactional
     public void alterBooking(ActiveBookingDTO activeBooking){
-        BookingDTO b = activeBookingDTOToBookingDetailed(activeBooking);
-        b.setBookingId(activeBooking.getBookingId());
+        Booking b = activeBookingDTOToBookingDetailed(activeBooking);
+        b.setId(activeBooking.getBookingId());
 
-        roomRepo.findById(activeBooking.getRId()).ifPresent(r -> b.setRoom(roomToRoomDTODetailed(r)));
-        guestRepo.findById(activeBooking.getRId()).ifPresent(g -> b.setGuest(guestToGuestDTODetailed(g)));
+        roomRepo.findById(activeBooking.getRId()).ifPresent(b::setRoom);
+        guestRepo.findById(activeBooking.getGId()).ifPresent(b::setGuest);
 
-        bookingRepo.findById(b.getBookingId()).ifPresent(booking -> {
+        bookingRepo.findById(b.getId()).ifPresent(booking -> {
             if (hasOverlappingDates(b)) {
                 throw new ResourceAlreadyExistsException("The room is not available on these dates");
             } else {
 
-                guestRepo.findById(activeBooking.getGId()).ifPresent(booking::setGuest);
-                roomRepo.findById(activeBooking.getRId()).ifPresent(booking::setRoom);
-
+                booking.setRoom(b.getRoom());
+                booking.setGuest(b.getGuest());
                 booking.setDateFrom(b.getDateFrom());
                 booking.setDateUntil(b.getDateUntil());
                 booking.setNumberOfGuests(b.getNumberOfGuests());
@@ -87,14 +82,14 @@ public class BookingService {
         });
     }
 
-    public boolean hasOverlappingDates(BookingDTO booking){
+    public boolean hasOverlappingDates(Booking booking){
         // check booking dates. the stream removes overlapping dates that are from the same booking when altering booking
         List<Booking> overlapping = bookingRepo.findByRoomIdAndDateUntilAfterAndDateFromBefore(
-                booking.getRoom().getRoomId(),
+                booking.getRoom().getId(),
                 booking.getDateFrom(),
                 booking.getDateUntil())
                 .stream()
-                .filter(b -> booking.getBookingId() == null || !Objects.equals(b.getId(), booking.getBookingId()))
+                .filter(b -> booking.getId() == null || !Objects.equals(b.getId(), booking.getId()))
                 .filter(room -> booking.getRoom().getRoomSize()>=RoomService.getMinRoomSize(booking.getNumberOfGuests()))
                 .toList();
         // if overlapping dates in Room.getId() = fail.

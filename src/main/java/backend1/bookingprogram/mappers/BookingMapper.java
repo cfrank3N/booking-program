@@ -36,8 +36,8 @@ public class BookingMapper {
                 .build();
     }
 
-    public static BookingDTO activeBookingDTOToBookingDetailed(ActiveBookingDTO b) {
-        return BookingDTO.builder()
+    public static Booking activeBookingDTOToBookingDetailed(ActiveBookingDTO b) {
+        return Booking.builder()
                 .dateFrom(b.getDateFrom())
                 .dateUntil(b.getDateUntil())
                 .numberOfGuests(b.getNumberOfGuests())
