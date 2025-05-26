@@ -34,7 +34,7 @@ public class GuestController {
     }
 
     @GetMapping("/guest/register")
-    public String viewHomepage(Model model) {
+    public String registerGuest(Model model) {
         model.addAttribute("guest", new GuestDTO());
         return REGISTER_GUEST.getViewName();
     }
@@ -46,9 +46,6 @@ public class GuestController {
         booking.setRId(rId);
 
         log.info("Booking status [2/3]: room selected: {}", booking);
-
-//        System.out.println("This is when we fetch the room");
-//        System.out.println(booking);
 
         List<GuestDTO> guests = service.fetchAllGuests();
         model.addAttribute("booking", booking);
