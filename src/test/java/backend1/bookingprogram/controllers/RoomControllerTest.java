@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 
 import static backend1.bookingprogram.enums.RoutingInfo.SELECT_ROOM;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -21,6 +22,14 @@ class RoomControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private RoomController controller;
+
+    @Test
+    void controllerLoads(){
+        assertThat(controller).isNotNull();
+    }
 
     @Test
     void fetchAllAvailableRooms() throws Exception {
