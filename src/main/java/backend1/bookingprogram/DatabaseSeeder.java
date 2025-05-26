@@ -10,6 +10,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,9 +36,9 @@ public class DatabaseSeeder {
             Room room3 = new Room("909", "suite", 90, null);
             roomRepository.saveAll(List.of(room1, room2, room3));
 
-            Guest guest1 = new Guest("Andreas", "Andreas@Hotmale.com", "+46763060692", null);
-            Guest guest2 = new Guest("Arvid", "Arvid@Gmail.com", "+46763060693", null);
-            Guest guest3 = new Guest("Adam", "Adam@Gmail.com", "+46763060694", null);
+            Guest guest1 = new Guest("Andreas", "Andreas@Hotmale.com", "+46763060692", new ArrayList<>());
+            Guest guest2 = new Guest("Arvid", "Arvid@Gmail.com", "+46763060693", new ArrayList<>());
+            Guest guest3 = new Guest("Adam", "Adam@Gmail.com", "+46763060694", new ArrayList<>());
             guestRepository.saveAll(List.of(guest1, guest2, guest3));
 
 

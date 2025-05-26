@@ -1,10 +1,12 @@
 package backend1.bookingprogram.service;
 
 
+import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.dtos.GuestDTO;
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
+import backend1.bookingprogram.mappers.BookingMapper;
 import backend1.bookingprogram.mappers.GuestMapper;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.models.Guest;
@@ -65,10 +67,11 @@ public class GuestService {
                 .stream().anyMatch(booking -> LocalDate.now().isBefore(booking.getDateUntil()));
     }
 
-    public List<Booking> showActiveBookings(Long guestID) {
+    public List<BookingDTO> showActiveBookings(Long guestID) {
         Guest guest = repo.findById(guestID).orElseThrow(() -> new ResourceDoesntExistException("Guest not found"));
 
-        return guest.getBookings().stream().filter(booking -> LocalDate.now().isBefore(booking.getDateUntil())).toList();
+        return guest.getBookings().stream().filter(booking -> LocalDate.now().isBefore(booking.getDateUntil())).toList().stream()
+                .map(booking -> BookingMapper.bookingToBookingDTODetailed(booking)).toList();
     }
 
     @Transactional
@@ -79,7 +82,7 @@ public class GuestService {
             }
         });
 
-        Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
+        Guest guest = repo.findById(id).orElseThrow(() -> new ResourceDoesntExistException("Guest not found"));
         log.info("Altering {}", guest );
 
         guest.setName(g.getName());
