@@ -82,7 +82,7 @@ public class GuestService {
             }
         });
 
-        Guest guest = repo.findById(id).orElseThrow(() -> new ResourceAlreadyExistsException("Guest not found"));
+        Guest guest = repo.findById(id).orElseThrow(() -> new ResourceDoesntExistException("Guest not found"));
         log.info("Altering {}", guest );
 
         guest.setName(g.getName());
