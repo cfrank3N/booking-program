@@ -6,6 +6,7 @@ import backend1.bookingprogram.dtos.*;
 
 import backend1.bookingprogram.exceptions.CantDeleteException;
 import backend1.bookingprogram.exceptions.EmailValidationException;
+import backend1.bookingprogram.exceptions.EmptyResourceException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
@@ -77,10 +78,14 @@ public class GuestController {
                                    Model model,
                                    RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getFieldErrors());
             if (!bindingResult.getFieldErrors("email").isEmpty()) {
                 throw new EmailValidationException(guest, "Faulty email adress");
             }
 
+        }
+        if (guest.getName().isEmpty()) {
+            throw new EmptyResourceException(guest, "Name can't be empty");
         }
         try {
             service.alterGuest(id, guest);

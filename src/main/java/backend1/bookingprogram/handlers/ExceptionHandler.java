@@ -62,6 +62,20 @@ public class ExceptionHandler {
 
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(EmptyResourceException.class)
+    public ModelAndView handleEmailValidation(EmptyResourceException e) {
+
+        ModelAndView mav = new ModelAndView();
+
+        mav.addObject("errorTwo", e.getMessage());
+        mav.addObject("guest", e.getGuest());
+
+        mav.setViewName(ALTER_GUEST.getViewName());
+
+        return mav;
+
+    }
+
     @org.springframework.web.bind.annotation.ExceptionHandler(FaultyDateException.class)
     public ModelAndView handleFaultyDate(RedirectAttributes redirectAttributes, FaultyDateException e) {
         redirectAttributes.addFlashAttribute("error", e.getMessage());
