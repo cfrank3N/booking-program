@@ -13,6 +13,7 @@ import static backend1.bookingprogram.enums.RoutingInfo.REGISTER_GUEST;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -26,6 +27,14 @@ class GuestControllerTest {
 
     @Autowired
     private GuestRepository repo;
+
+    @Autowired
+    private GuestController controller;
+
+    @Test
+    void controllerLoads(){
+        assertThat(controller).isNotNull();
+    }
 
     @Test
     void registerGuest() throws Exception {
