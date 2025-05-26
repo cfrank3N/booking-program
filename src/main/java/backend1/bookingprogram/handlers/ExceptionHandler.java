@@ -2,10 +2,7 @@ package backend1.bookingprogram.handlers;
 
 import backend1.bookingprogram.dtos.ActiveBookingDTO;
 import backend1.bookingprogram.dtos.GuestDTO;
-import backend1.bookingprogram.exceptions.CantDeleteException;
-import backend1.bookingprogram.exceptions.FaultyDateException;
-import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
-import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
+import backend1.bookingprogram.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +46,34 @@ public class ExceptionHandler {
             mav.setViewName(HOMEPAGE.getViewName());
         }
         return mav;
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(EmailValidationException.class)
+    public ModelAndView handleEmailValidation(EmailValidationException e) {
+
+        ModelAndView mav = new ModelAndView();
+
+        mav.addObject("error", e.getMessage());
+        mav.addObject("guest", e.getGuest());
+
+        mav.setViewName(ALTER_GUEST.getViewName());
+
+        return mav;
+
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(EmptyResourceException.class)
+    public ModelAndView handleEmailValidation(EmptyResourceException e) {
+
+        ModelAndView mav = new ModelAndView();
+
+        mav.addObject("errorTwo", e.getMessage());
+        mav.addObject("guest", e.getGuest());
+
+        mav.setViewName(ALTER_GUEST.getViewName());
+
+        return mav;
+
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(FaultyDateException.class)

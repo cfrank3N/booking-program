@@ -22,6 +22,7 @@
         <div class="mb-3">
             <label>Name:</label>
             <input type="text" th:field="*{name}" class="form-control"/>
+            <p th:if="${errorTwo}" class="text-danger mt-2" th:text="${errorTwo}"></p>
         </div>
 
         <div class="mb-3">
