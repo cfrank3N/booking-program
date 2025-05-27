@@ -48,8 +48,8 @@ public class RoomController {
         log.info("Altering booking: {}", booking);
 
         booking.setBookingId(id);
-        List<RoomDTO> rooms = roomService.fetchAllAvailableRooms(booking.getDateFrom(),
-                booking.getDateUntil(), booking.getNumberOfGuests());
+        List<RoomDTO> rooms = roomService.fetchAllAvailableRoomsForAlterBooking(booking.getDateFrom(),
+                booking.getDateUntil(), booking.getNumberOfGuests(), booking.getBookingId());
         model.addAttribute("rooms", rooms);
         model.addAttribute("booking", booking);
         return ALTER_BOOKING.getViewName();
