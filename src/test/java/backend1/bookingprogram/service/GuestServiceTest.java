@@ -1,5 +1,6 @@
 package backend1.bookingprogram.service;
 
+import backend1.bookingprogram.config.TestContainersConfig;
 import backend1.bookingprogram.dtos.GuestDTO;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
@@ -7,22 +8,22 @@ import backend1.bookingprogram.mappers.GuestMapper;
 import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.repositories.GuestRepository;
 import jakarta.transaction.Transactional;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@Testcontainers
+@Import(TestContainersConfig.class)
 class GuestServiceTest {
 
     @Autowired
