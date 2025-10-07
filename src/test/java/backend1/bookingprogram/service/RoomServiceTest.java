@@ -1,11 +1,13 @@
 package backend1.bookingprogram.service;
 
+import backend1.bookingprogram.config.TestContainersConfig;
 import backend1.bookingprogram.dtos.RoomDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles("test")
+@Testcontainers
+@Import(TestContainersConfig.class)
 class RoomServiceTest {
 
     @Autowired
