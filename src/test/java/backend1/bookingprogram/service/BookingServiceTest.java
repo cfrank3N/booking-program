@@ -8,7 +8,6 @@ import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Booking;
 import backend1.bookingprogram.models.Guest;
 import backend1.bookingprogram.models.Room;
-import backend1.bookingprogram.repositories.BookingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,9 +36,6 @@ class BookingServiceTest {
 
     @Autowired
     private BookingService service;
-
-    @Autowired
-    private BookingRepository repo;
 
     @Test
     void fetchAllBookings() {
