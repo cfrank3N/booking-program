@@ -2,6 +2,7 @@ package backend1.bookingprogram.service;
 
 import backend1.bookingprogram.config.TestContainersConfig;
 import backend1.bookingprogram.dtos.RoomDTO;
+import backend1.bookingprogram.exceptions.FaultyDateException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ class RoomServiceTest {
     private final LocalDate start2 = LocalDate.now().plusDays(10);
     private final LocalDate end = LocalDate.now().plusDays(7);
     private final LocalDate end2 = LocalDate.now().plusDays(20);
+    private final LocalDate faultyDate = LocalDate.now().minusDays(20);
 
     @Test
     void getMinRoomSize() {
@@ -66,5 +68,12 @@ class RoomServiceTest {
 
         assertNotEquals(5, result.size());
         assertEquals(3, result.size());
+    }
+
+    @Test
+    void validateBookingFormFields() {
+        assertThrows(FaultyDateException.class, () -> roomService.validateBookingFormFields(end, start));
+        assertThrows(FaultyDateException.class, () -> roomService.validateBookingFormFields(faultyDate, end));
+        assertThrows(FaultyDateException.class, () -> roomService.validateBookingFormFields(null, null));
     }
 }
