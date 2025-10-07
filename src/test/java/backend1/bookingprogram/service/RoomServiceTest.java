@@ -59,4 +59,12 @@ class RoomServiceTest {
         assertEquals(1, result3.size());
 
     }
+
+    @Test
+    void fetchAllRoomsTest() {
+        List<RoomDTO> result = roomService.fetchAllRooms();
+
+        assertNotEquals(5, result.size());
+        assertEquals(3, result.size());
+    }
 }
