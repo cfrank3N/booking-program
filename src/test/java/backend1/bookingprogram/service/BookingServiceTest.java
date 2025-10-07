@@ -6,6 +6,8 @@ import backend1.bookingprogram.dtos.BookingDTO;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.exceptions.ResourceDoesntExistException;
 import backend1.bookingprogram.models.Booking;
+import backend1.bookingprogram.models.Guest;
+import backend1.bookingprogram.models.Room;
 import backend1.bookingprogram.repositories.BookingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,11 +70,48 @@ class BookingServiceTest {
     }
 
     @Test
-    void alterBooking() {
-    }
-
-    @Test
     void hasOverlappingDates() {
+
+        Booking correctBooking = Booking.builder()
+                .id(1L)
+                .dateFrom(LocalDate.now().plusDays(2))
+                .dateUntil(LocalDate.now().plusDays(10))
+                .guest(Guest.builder()
+                        .id(1L)
+                        .name("Andreas")
+                        .email("Andreas@Hotmale.com")
+                        .phonenumber("+46763060692")
+                        .build())
+                .numberOfGuests(1)
+                .room(Room.builder()
+                        .id(1L)
+                        .roomNumber("101")
+                        .roomName("single room")
+                        .roomSize(12)
+                        .build())
+                .build();
+
+        Booking incorrectBooking = Booking.builder()
+                .id(2L)
+                .dateFrom(LocalDate.now().plusDays(2))
+                .dateUntil(LocalDate.now().plusDays(10))
+                .guest(Guest.builder()
+                        .id(1L)
+                        .name("Andreas")
+                        .email("Andreas@Hotmale.com")
+                        .phonenumber("+46763060692")
+                        .build())
+                .numberOfGuests(1)
+                .room(Room.builder()
+                        .id(1L)
+                        .roomNumber("101")
+                        .roomName("single room")
+                        .roomSize(12)
+                        .build())
+                .build();
+
+        assertFalse(service.hasOverlappingDates(correctBooking));
+        assertTrue(service.hasOverlappingDates(incorrectBooking));
     }
 
     @Test

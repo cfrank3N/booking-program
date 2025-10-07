@@ -11,10 +11,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static backend1.bookingprogram.enums.RoutingInfo.REGISTER_GUEST;
-
 import java.time.LocalDate;
 
+import static backend1.bookingprogram.enums.RoutingInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -78,5 +77,30 @@ class GuestControllerTest {
                 .andExpect(model().attributeExists("booking"))
                 .andExpect(model().attributeExists("guests"));
 
+    }
+
+    @Test
+    void showAlterForm() throws Exception {
+        mvc.perform(get("/guest/alter/" + 1))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ALTER_GUEST.getViewName()))
+                .andExpect(model().attributeExists("guest"));
+    }
+
+    @Test
+    void showActiveBookingsOfGuest() throws Exception {
+        mvc.perform(get("/guest/bookings/" + 1))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ACTIVE_BOOKINGS.getViewName()))
+                .andExpect(model().attributeExists("bookings"))
+                .andExpect(model().attributeExists("guest"));
+    }
+
+    @Test
+    void chooseGuestToAlter() throws Exception {
+        mvc.perform(get("/guest/alter"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("choose-guest-to-alter"))
+                .andExpect(model().attributeExists("guests"));
     }
 }
