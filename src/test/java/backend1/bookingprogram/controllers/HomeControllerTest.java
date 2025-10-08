@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static backend1.bookingprogram.enums.RoutingInfo.ALTER_BOOKING;
-import static org.assertj.core.api.Assertions.assertThat;
+import static backend1.bookingprogram.enums.RoutingInfo.HOMEPAGE;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -18,32 +18,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @Import(TestContainersConfig.class)
-public class BookingControllerTest {
+class HomeControllerTest {
+
     @Autowired
     private MockMvc mvc;
 
     @Autowired
-    private BookingController controller;
+    private HomeController controller;
 
     @Test
-    void controllerLoads(){
-        assertThat(controller).isNotNull();
+    void controllerLoads() {
+        assertNotNull(controller);
     }
 
     @Test
-    void fetchAllBookings() throws Exception {
-        mvc.perform(get("/booking/alter"))
+    void fetchHomePage() throws Exception {
+        mvc.perform(get("/home"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("choose-booking-to-alter"))
-                .andExpect(model().attributeExists("bookings"));
+                .andExpect(view().name(HOMEPAGE.getViewName()));
     }
-
-    @Test
-    void showBookingForm() throws Exception {
-        mvc.perform(get("/booking/alter/" + 1))
-                .andExpect(status().isOk())
-                .andExpect(view().name(ALTER_BOOKING.getViewName()))
-                .andExpect(model().attributeExists("booking"));
-    }
-
 }

@@ -10,7 +10,6 @@ import backend1.bookingprogram.exceptions.EmptyResourceException;
 import backend1.bookingprogram.exceptions.ResourceAlreadyExistsException;
 import backend1.bookingprogram.service.GuestService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
