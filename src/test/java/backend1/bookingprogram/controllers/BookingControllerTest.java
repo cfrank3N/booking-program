@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static backend1.bookingprogram.enums.RoutingInfo.ALTER_BOOKING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,6 +36,14 @@ public class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("choose-booking-to-alter"))
                 .andExpect(model().attributeExists("bookings"));
+    }
+
+    @Test
+    void showBookingForm() throws Exception {
+        mvc.perform(get("/booking/alter/" + 1))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ALTER_BOOKING.getViewName()))
+                .andExpect(model().attributeExists("booking"));
     }
 
 }
